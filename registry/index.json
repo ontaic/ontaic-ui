@@ -29,6 +29,48 @@
       "description": "Modal dialog overlay",
       "file": "modal.py",
       "themes": ["default", "glassmorphism"]
+    },
+    {
+      "name": "alert",
+      "description": "Alert/notification banner",
+      "file": "alert.py",
+      "themes": ["default"]
+    },
+    {
+      "name": "badge",
+      "description": "Badge/tag indicator",
+      "file": "badge.py",
+      "themes": ["default"]
+    },
+    {
+      "name": "avatar",
+      "description": "User avatar with image or initials",
+      "file": "avatar.py",
+      "themes": ["default"]
+    },
+    {
+      "name": "tabs",
+      "description": "Tab navigation component",
+      "file": "tabs.py",
+      "themes": ["default"]
+    },
+    {
+      "name": "progress",
+      "description": "Progress bar indicator",
+      "file": "progress.py",
+      "themes": ["default"]
+    },
+    {
+      "name": "separator",
+      "description": "Horizontal/vertical divider",
+      "file": "separator.py",
+      "themes": ["default"]
+    },
+    {
+      "name": "skeleton",
+      "description": "Loading skeleton placeholder",
+      "file": "skeleton.py",
+      "themes": ["default"]
     }
   ]
 }

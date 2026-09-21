@@ -2,7 +2,7 @@ use anyhow::Result;
 use reqwest::Client;
 use tokio::fs;
 
-const REGISTRY_BASE: &str = "https://raw.githubusercontent.com/ontaic-ui/registry/main";
+const REGISTRY_BASE: &str = "https://raw.githubusercontent.com/ontaic/ontaic-ui/main/registry";
 
 pub async fn execute(component: &str, theme: Option<&str>) -> Result<()> {
     let client = Client::new();
