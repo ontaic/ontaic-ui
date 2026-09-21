@@ -14,6 +14,10 @@ from ontaic.validation import (
     Email, URL, Phone, Numeric, Integer, Min, Max, Custom, MatchField,
 )
 from ontaic.state import PersistentState, ComputedState, StateManager
+from ontaic.database import Database, Repository, UserManager, PostManager, init_database
+from ontaic.auth import AuthManager, User, Session, CookieAuth, JWTAuth
+from ontaic.api import ApiClient, UsersApi, PostsApi, AuthApi, create_api_client
+from ontaic.upload import FileUploader, ImageUploader, DocumentUploader, UploadComponent
 from ontaic.watcher import FileWatcher
 from ontaic.compiler import OntaicCompiler
 from ontaic.ai import (
@@ -45,6 +49,14 @@ __all__ = [
     "Email", "URL", "Phone", "Numeric", "Integer", "Min", "Max", "Custom", "MatchField",
     # State
     "PersistentState", "ComputedState", "StateManager",
+    # Database
+    "Database", "Repository", "UserManager", "PostManager", "init_database",
+    # Auth
+    "AuthManager", "User", "Session", "CookieAuth", "JWTAuth",
+    # API
+    "ApiClient", "UsersApi", "PostsApi", "AuthApi", "create_api_client",
+    # Upload
+    "FileUploader", "ImageUploader", "DocumentUploader", "UploadComponent",
     # Utilities
     "FileWatcher", "OntaicCompiler",
     # AI
