@@ -40,6 +40,10 @@ from ontaic.extra_components import (
     Accordion, Breadcrumb, Pagination, Tooltip, Popover,
     Alert, Avatar, Tag, StatusDot, EmptyState,
 )
+from ontaic.testing import (
+    TestSuite, ComponentTestSuite, CompilerTestSuite, IntegrationTestSuite,
+    TestResult, create_example_tests,
+)
 from ontaic.watcher import FileWatcher
 from ontaic.compiler import OntaicCompiler
 from ontaic.ai import (
