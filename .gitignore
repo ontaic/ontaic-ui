@@ -11,3 +11,7 @@ __pycache__
 Thumbs.db
 test_schema.json
 *.pytest_cache
+examples/*/node_modules/
+examples/*/package-lock.json
+examples/*/src/schema.json
+schema.json

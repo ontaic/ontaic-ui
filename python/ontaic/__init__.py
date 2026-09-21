@@ -40,6 +40,15 @@ from ontaic.extra_components import (
     Accordion, Breadcrumb, Pagination, Tooltip, Popover,
     Alert, Avatar, Tag, StatusDot, EmptyState,
 )
+from ontaic.errors import (
+    ErrorHandler, ErrorBoundary, ErrorInfo,
+    ValidationError, NotFoundError, AuthenticationError, AuthorizationError,
+    retry, CircuitBreaker, Cache, RateLimiter,
+)
+from ontaic.performance import (
+    PerformanceMonitor, Timer, timed, cache,
+    MemoryMonitor, CpuMonitor, get_performance_monitor,
+)
 from ontaic.testing import (
     TestSuite, ComponentTestSuite, CompilerTestSuite, IntegrationTestSuite,
     TestResult, create_example_tests,
@@ -104,6 +113,16 @@ __all__ = [
     # Components
     "Accordion", "Breadcrumb", "Pagination", "Tooltip", "Popover",
     "Alert", "Avatar", "Tag", "StatusDot", "EmptyState",
+    # Errors
+    "ErrorHandler", "ErrorBoundary", "ErrorInfo",
+    "ValidationError", "NotFoundError", "AuthenticationError", "AuthorizationError",
+    "retry", "CircuitBreaker", "Cache", "RateLimiter",
+    # Performance
+    "PerformanceMonitor", "Timer", "timed", "cache",
+    "MemoryMonitor", "CpuMonitor", "get_performance_monitor",
+    # Testing
+    "TestSuite", "ComponentTestSuite", "CompilerTestSuite", "IntegrationTestSuite",
+    "TestResult", "create_example_tests",
     # Utilities
     "FileWatcher", "OntaicCompiler",
     # AI
