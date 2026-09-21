@@ -7,6 +7,13 @@ from ontaic.layouts import (
 from ontaic.forms import FormField, Form, Select, Checkbox, Radio
 from ontaic.conditional import If, Show, ForEach, Switch, Unless, Fragment
 from ontaic.navigation import Router, NavLink, Navbar, Sidebar, SidebarLink
+from ontaic.overlay import Modal, ConfirmDialog, AlertDialog, Drawer, Toast
+from ontaic.table import Table, DataTable, DataGrid, CardList
+from ontaic.validation import (
+    FormValidator, Required, MinLength, MaxLength, Pattern,
+    Email, URL, Phone, Numeric, Integer, Min, Max, Custom, MatchField,
+)
+from ontaic.state import PersistentState, ComputedState, StateManager
 from ontaic.watcher import FileWatcher
 from ontaic.compiler import OntaicCompiler
 from ontaic.ai import (
@@ -29,6 +36,15 @@ __all__ = [
     "If", "Show", "ForEach", "Switch", "Unless", "Fragment",
     # Navigation
     "Router", "NavLink", "Navbar", "Sidebar", "SidebarLink",
+    # Overlays
+    "Modal", "ConfirmDialog", "AlertDialog", "Drawer", "Toast",
+    # Tables
+    "Table", "DataTable", "DataGrid", "CardList",
+    # Validation
+    "FormValidator", "Required", "MinLength", "MaxLength", "Pattern",
+    "Email", "URL", "Phone", "Numeric", "Integer", "Min", "Max", "Custom", "MatchField",
+    # State
+    "PersistentState", "ComputedState", "StateManager",
     # Utilities
     "FileWatcher", "OntaicCompiler",
     # AI
