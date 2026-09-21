@@ -1,0 +1,33 @@
+[package]
+name = "ontaic-runtime"
+version = "0.1.0"
+edition = "2021"
+
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = false
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+wasm-bindgen = "0.2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+js-sys = "0.3"
+lazy_static = "1.4"
+console_error_panic_hook = { version = "0.1", optional = true }
+
+[dependencies.web-sys]
+version = "0.3"
+features = [
+    "Document",
+    "Element",
+    "Window",
+    "Node",
+    "Text",
+    "HtmlElement",
+    "console",
+]
+
+[features]
+default = ["console_error_panic_hook"]

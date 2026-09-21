@@ -1,0 +1,11 @@
+/target
+/pkg
+/dist
+/node_modules
+*.pyc
+__pycache__
+*.egg-info
+.env
+.env.local
+.DS_Store
+Thumbs.db

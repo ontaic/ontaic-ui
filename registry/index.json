@@ -1,0 +1,34 @@
+{
+  "components": [
+    {
+      "name": "button",
+      "description": "Interactive button element",
+      "file": "button.py",
+      "themes": ["default", "glassmorphism", "brutalist", "neon", "minimal"]
+    },
+    {
+      "name": "card",
+      "description": "Content card container",
+      "file": "card.py",
+      "themes": ["default", "glassmorphism", "brutalist", "neon", "minimal"]
+    },
+    {
+      "name": "input",
+      "description": "Text input field",
+      "file": "input.py",
+      "themes": ["default", "glassmorphism", "brutalist", "neon", "minimal"]
+    },
+    {
+      "name": "datagrid",
+      "description": "Data table with sorting and filtering",
+      "file": "datagrid.py",
+      "themes": ["default", "glassmorphism"]
+    },
+    {
+      "name": "modal",
+      "description": "Modal dialog overlay",
+      "file": "modal.py",
+      "themes": ["default", "glassmorphism"]
+    }
+  ]
+}
