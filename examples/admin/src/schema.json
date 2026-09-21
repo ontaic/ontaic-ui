@@ -1,0 +1,36 @@
+{
+  "version": "1.0",
+  "html": "<a href=\"<span id=\"v-28\"></span>\" class=\"text-gray-600 hover:text-gray-900 px-3 py-2 text-sm font-medium\"><span id=\"v-29\"></span></a>",
+  "bindings": {
+    "card_title": "v-26",
+    "value": "v-27",
+    "href": "v-28",
+    "link_text": "v-29"
+  },
+  "events": {},
+  "initialState": {
+    "show_modal": "false",
+    "show_confirm": "false",
+    "selected_user": "",
+    "notification": ""
+  },
+  "components": [
+    {
+      "name": "AdminDashboard",
+      "states": [
+        "show_modal",
+        "show_confirm",
+        "selected_user",
+        "notification"
+      ]
+    },
+    {
+      "name": "StatsCard",
+      "states": []
+    },
+    {
+      "name": "NavLink",
+      "states": []
+    }
+  ]
+}
