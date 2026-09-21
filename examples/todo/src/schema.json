@@ -1,0 +1,23 @@
+{
+  "version": "1.0",
+  "html": "<div id=\"v-0\" class=\"max-w-2xl mx-auto py-8\"><div id=\"v-1\" class=\"bg-white p-6 rounded-lg shadow\"><h1 id=\"v-2\" class=\"text-2xl font-bold mb-4\">Simple Todo</h1><div id=\"v-3\" class=\"gap-2 mb-6\"><input id=\"v-4\" class=\"flex-1 px-4 py-2 border border-gray-300 rounded-lg\" placeholder=\"Add a new todo...\" value=\"self.new_todo\"></input><button id=\"v-5\" class=\"bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600\">Add</button></div><hr id=\"v-6\" class=\"my-4\"></hr><div id=\"v-7\" class=\"space-y-2\"><p id=\"v-8\" class=\"text-gray-500\">Todo items will appear here</p></div></div></div>",
+  "bindings": {},
+  "events": {
+    "v-5": {
+      "click": "update_state('add_todo', )"
+    }
+  },
+  "initialState": {
+    "todos": "Learn Ontaic,Build an app,Deploy to production",
+    "new_todo": ""
+  },
+  "components": [
+    {
+      "name": "SimpleTodo",
+      "states": [
+        "todos",
+        "new_todo"
+      ]
+    }
+  ]
+}

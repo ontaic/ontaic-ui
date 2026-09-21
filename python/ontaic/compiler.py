@@ -308,6 +308,11 @@ class OntaicCompiler:
             method = node.func.attr
             args = [self._compile_expr_to_js(arg) for arg in node.args]
             return f"update_state('{method}', {', '.join(args)})"
+        elif isinstance(node.func, ast.Name):
+            # Function call like add_todo()
+            func_name = node.func.id
+            args = [self._compile_expr_to_js(arg) for arg in node.args]
+            return f"update_state('{func_name}', {', '.join(args)})"
         return ""
 
     def _compile_expr_to_js(self, node: ast.expr) -> str:
