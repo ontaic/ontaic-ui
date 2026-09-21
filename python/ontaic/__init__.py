@@ -20,6 +20,12 @@ from ontaic.api import ApiClient, UsersApi, PostsApi, AuthApi, create_api_client
 from ontaic.upload import FileUploader, ImageUploader, DocumentUploader, UploadComponent
 from ontaic.theme import ThemeManager, ThemeToggle, ThemeSelector, LIGHT_THEME, DARK_THEME
 from ontaic.websocket_server import WebSocketServer, WebSocketClient
+from ontaic.i18n import I18n, LocaleSelector, T, LOCALES
+from ontaic.charts import (
+    Chart, LineChart, BarChart, PieChart, DoughnutChart, RadarChart,
+    PolarAreaChart, BubbleChart, ScatterChart, ChartDataset, ChartOptions,
+    StatCard, ProgressBar, MetricCard, Gauge, Timeline,
+)
 from ontaic.watcher import FileWatcher
 from ontaic.compiler import OntaicCompiler
 from ontaic.ai import (
@@ -63,6 +69,12 @@ __all__ = [
     "ThemeManager", "ThemeToggle", "ThemeSelector", "LIGHT_THEME", "DARK_THEME",
     # WebSocket
     "WebSocketServer", "WebSocketClient",
+    # i18n
+    "I18n", "LocaleSelector", "T", "LOCALES",
+    # Charts
+    "Chart", "LineChart", "BarChart", "PieChart", "DoughnutChart", "RadarChart",
+    "PolarAreaChart", "BubbleChart", "ScatterChart", "ChartDataset", "ChartOptions",
+    "StatCard", "ProgressBar", "MetricCard", "Gauge", "Timeline",
     # Utilities
     "FileWatcher", "OntaicCompiler",
     # AI
