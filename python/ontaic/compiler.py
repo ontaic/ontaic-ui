@@ -282,6 +282,14 @@ class OntaicCompiler:
             elif isinstance(body, ast.Name):
                 return f"update_state('{self._get_first_state_name()}', '{body.id}')"
 
+            elif isinstance(body, ast.Call):
+                return self._compile_call_to_js(body)
+
+            elif isinstance(body, ast.Attribute):
+                state_name = self._extract_state_ref(body)
+                if state_name:
+                    return f"update_state('{state_name}', !get_state('{state_name}'))"
+
             return self._compile_expr_to_js(body)
 
         elif isinstance(node, ast.Call):
@@ -339,6 +347,35 @@ class OntaicCompiler:
             "paragraph": "p",
             "list": "ul",
             "listitem": "li",
+            # Layouts
+            "container": "div",
+            "flex": "div",
+            "grid": "div",
+            "stack": "div",
+            "center": "div",
+            "spacer": "div",
+            "card": "div",
+            "divider": "hr",
+            "badge": "span",
+            # Forms
+            "formfield": "div",
+            "form": "form",
+            "select": "select",
+            "checkbox": "div",
+            "radio": "div",
+            # Navigation
+            "router": "div",
+            "navlink": "a",
+            "navbar": "nav",
+            "sidebar": "aside",
+            "sidebarlink": "a",
+            # Conditionals
+            "if": "div",
+            "show": "div",
+            "foreach": "div",
+            "switch": "div",
+            "unless": "div",
+            "fragment": "div",
         }
         return tag_map.get(name.lower(), name.lower())
 
