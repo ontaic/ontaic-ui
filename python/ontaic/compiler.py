@@ -319,6 +319,10 @@ class OntaicCompiler:
         elif isinstance(node, ast.Name):
             return node.id
         elif isinstance(node, ast.Attribute):
+            # Check if this is a self.xxx state reference
+            state_name = self._extract_state_ref(node)
+            if state_name:
+                return f"get_state('{state_name}')"
             obj = self._compile_expr_to_js(node.value)
             return f"{obj}.{node.attr}"
         return ""
