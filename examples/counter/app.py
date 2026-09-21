@@ -7,24 +7,35 @@ class Counter(Component):
     def render(self):
         return Box(
             Box(
-                Text(f"Clicks: {self.count}", tag="h1", class_name="text-4xl font-bold text-gray-900"),
-                class_name="text-center mb-6"
+                Text(f"Count: {self.count}", tag="h1", class_name="text-4xl font-bold text-gray-900 mb-4"),
+                Text("Click the buttons to update the counter", tag="p", class_name="text-gray-500 mb-6"),
+                class_name="text-center"
             ),
             Box(
                 Button(
-                    "Increment",
-                    on_click=lambda: self.count + 1,
-                    class_name="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium"
+                    "-10",
+                    on_click=lambda: self.count - 10,
+                    class_name="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg font-medium"
                 ),
                 Button(
-                    "Decrement",
+                    "-1",
                     on_click=lambda: self.count - 1,
-                    class_name="bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-3 rounded-lg font-medium ml-2"
+                    class_name="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg font-medium"
                 ),
                 Button(
                     "Reset",
                     on_click=lambda: 0,
-                    class_name="bg-red-100 hover:bg-red-200 text-red-700 px-6 py-3 rounded-lg font-medium ml-2"
+                    class_name="px-4 py-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg font-medium"
+                ),
+                Button(
+                    "+1",
+                    on_click=lambda: self.count + 1,
+                    class_name="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium"
+                ),
+                Button(
+                    "+10",
+                    on_click=lambda: self.count + 10,
+                    class_name="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium"
                 ),
                 class_name="flex justify-center gap-2"
             ),

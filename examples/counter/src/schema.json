@@ -1,0 +1,35 @@
+{
+  "version": "1.0",
+  "html": "<div id=\"v-0\" class=\"min-h-screen flex flex-col items-center justify-center bg-gray-50 p-8\"><div id=\"v-1\" class=\"text-center\"><h1 id=\"v-2\" class=\"text-4xl font-bold text-gray-900 mb-4\">Count: <span id=\"v-3\"></span></h1><p id=\"v-4\" class=\"text-gray-500 mb-6\">Click the buttons to update the counter</p></div><div id=\"v-5\" class=\"flex justify-center gap-2\"><button id=\"v-6\" class=\"px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg font-medium\">-10</button><button id=\"v-7\" class=\"px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg font-medium\">-1</button><button id=\"v-8\" class=\"px-4 py-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg font-medium\">Reset</button><button id=\"v-9\" class=\"px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium\">+1</button><button id=\"v-10\" class=\"px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium\">+10</button></div></div>",
+  "bindings": {
+    "count": "v-3"
+  },
+  "events": {
+    "v-6": {
+      "click": "update_state('count', String(Number(get_state('count')) - 10))"
+    },
+    "v-7": {
+      "click": "update_state('count', String(Number(get_state('count')) - 1))"
+    },
+    "v-8": {
+      "click": "update_state('count', '0')"
+    },
+    "v-9": {
+      "click": "update_state('count', String(Number(get_state('count')) + 1))"
+    },
+    "v-10": {
+      "click": "update_state('count', String(Number(get_state('count')) + 10))"
+    }
+  },
+  "initialState": {
+    "count": "0"
+  },
+  "components": [
+    {
+      "name": "Counter",
+      "states": [
+        "count"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "ontaic-counter-example",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "compile": "python -m ontaic.compiler --input app.py --output src/schema.json"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}

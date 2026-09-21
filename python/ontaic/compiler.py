@@ -1,6 +1,6 @@
 import ast
 import json
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 from pathlib import Path
 import sys
 
@@ -10,6 +10,7 @@ class OntaicCompiler:
 
     def __init__(self):
         self.node_counter = 0
+        self.state_fields: Dict[str, Any] = {}
 
     def compile_file(self, file_path: str) -> Dict[str, Any]:
         source = Path(file_path).read_text()
@@ -45,7 +46,8 @@ class OntaicCompiler:
             if py_file.name.startswith("_"):
                 continue
             try:
-                schema = self.compile_file(str(py_file))
+                compiler = OntaicCompiler()
+                schema = compiler.compile_file(str(py_file))
                 combined["html"] += schema["html"]
                 combined["bindings"].update(schema["bindings"])
                 combined["events"].update(schema["events"])
@@ -58,17 +60,31 @@ class OntaicCompiler:
 
     def _compile_class(self, node: ast.ClassDef, schema: Dict) -> None:
         class_name = node.name
-        state_fields = {}
+        self.state_fields = {}
         render_method = None
 
         for item in node.body:
-            if isinstance(item, ast.Assign):
+            if isinstance(item, ast.AnnAssign):
+                # Handle annotated assignments like `count: int = 0`
+                if isinstance(item.target, ast.Name) and item.value is not None:
+                    state_name = item.target.id
+                    default_value = self._extract_python_value(item.value)
+                    self.state_fields[state_name] = {
+                        "default": default_value,
+                        "type": self._get_value_type(default_value),
+                    }
+                    schema["initialState"][state_name] = self._serialize_value(default_value)
+
+            elif isinstance(item, ast.Assign):
                 for target in item.targets:
                     if isinstance(target, ast.Name):
                         state_name = target.id
-                        default_value = self._extract_value(item.value)
-                        state_fields[state_name] = default_value
-                        schema["initialState"][state_name] = str(default_value)
+                        default_value = self._extract_python_value(item.value)
+                        self.state_fields[state_name] = {
+                            "default": default_value,
+                            "type": self._get_value_type(default_value),
+                        }
+                        schema["initialState"][state_name] = self._serialize_value(default_value)
 
             elif isinstance(item, ast.FunctionDef) and item.name == "render":
                 render_method = item
@@ -78,7 +94,7 @@ class OntaicCompiler:
             schema["html"] = html
             schema["components"].append({
                 "name": class_name,
-                "states": list(state_fields.keys()),
+                "states": list(self.state_fields.keys()),
             })
 
     def _compile_render_method(self, method: ast.FunctionDef, schema: Dict) -> str:
@@ -121,16 +137,12 @@ class OntaicCompiler:
                 event_bindings[event_name] = self._compile_event_handler(kw.value, schema)
             elif kw.arg == "id":
                 node_id = self._extract_value(kw.value)
-            elif kw.arg == "src":
-                props["src"] = self._extract_value(kw.value)
-            elif kw.arg == "alt":
-                props["alt"] = self._extract_value(kw.value)
-            elif kw.arg == "placeholder":
-                props["placeholder"] = self._extract_value(kw.value)
-            elif kw.arg == "value":
-                props["value"] = self._extract_value(kw.value)
+            elif kw.arg in ("src", "alt", "placeholder", "value", "type", "href"):
+                props[kw.arg] = self._extract_value(kw.value)
             elif kw.arg == "input_type":
                 props["type"] = self._extract_value(kw.value)
+            elif kw.arg == "tag":
+                tag = self._extract_value(kw.value)
 
         for arg in node.args:
             content = self._compile_element(arg, schema)
@@ -164,14 +176,16 @@ class OntaicCompiler:
         parts = []
         for value in node.values:
             if isinstance(value, ast.Constant):
-                parts.append(str(value.value))
+                text = str(value.value)
+                if text:
+                    parts.append(text)
             elif isinstance(value, ast.FormattedValue):
                 state_ref = self._extract_state_ref(value.value)
                 if state_ref:
                     node_id = f"v-{self.node_counter}"
                     self.node_counter += 1
                     schema["bindings"][state_ref] = node_id
-                    parts.append(f'<span id="{node_id}">{{{{{state_ref}}}}}</span>')
+                    parts.append(f'<span id="{node_id}"></span>')
         return "".join(parts)
 
     def _extract_state_ref(self, node: ast.expr) -> Optional[str]:
@@ -192,18 +206,97 @@ class OntaicCompiler:
             }
         elif isinstance(node, ast.Name):
             return node.id
+        elif isinstance(node, ast.Attribute):
+            obj = self._extract_value(node.value)
+            return f"{obj}.{node.attr}"
         return ""
 
+    def _extract_python_value(self, node: ast.expr) -> Any:
+        """Extract actual Python value from AST node."""
+        if isinstance(node, ast.Constant):
+            return node.value
+        elif isinstance(node, ast.List):
+            return [self._extract_python_value(elt) for elt in node.elts]
+        elif isinstance(node, ast.Dict):
+            return {
+                self._extract_python_value(k): self._extract_python_value(v)
+                for k, v in zip(node.keys, node.values)
+            }
+        elif isinstance(node, ast.Name):
+            if node.id == "True":
+                return True
+            elif node.id == "False":
+                return False
+            elif node.id == "None":
+                return None
+            return node.id
+        elif isinstance(node, ast.UnaryOp) and isinstance(node.op, ast.USub):
+            return -self._extract_python_value(node.operand)
+        return ""
+
+    def _get_value_type(self, value: Any) -> str:
+        if isinstance(value, bool):
+            return "boolean"
+        elif isinstance(value, int):
+            return "integer"
+        elif isinstance(value, float):
+            return "number"
+        elif isinstance(value, list):
+            return "array"
+        elif isinstance(value, dict):
+            return "object"
+        return "string"
+
+    def _serialize_value(self, value: Any) -> str:
+        """Serialize Python value to string for WASM state."""
+        if isinstance(value, bool):
+            return "true" if value else "false"
+        elif isinstance(value, (int, float)):
+            return str(value)
+        elif isinstance(value, str):
+            return value
+        elif isinstance(value, (list, dict)):
+            return json.dumps(value)
+        return str(value)
+
     def _compile_event_handler(self, node: ast.expr, schema: Dict) -> str:
+        """Compile event handler to JavaScript code."""
         if isinstance(node, ast.Lambda):
-            return self._compile_expr_to_js(node.body)
+            body = node.body
+            if isinstance(body, ast.BinOp):
+                left = self._compile_expr_to_js(body.left)
+                right = self._compile_expr_to_js(body.right)
+                op = self._get_js_binop(body.op)
+
+                if isinstance(body.left, ast.Attribute):
+                    state_name = self._extract_state_ref(body.left)
+                    if state_name:
+                        new_value = f"Number(get_state('{state_name}')) {op} {right}"
+                        return f"update_state('{state_name}', String({new_value}))"
+
+            elif isinstance(body, ast.Constant):
+                if isinstance(body.value, bool):
+                    return f"update_state('{self._get_first_state_name()}', '{str(body.value).lower()}')"
+                return f"update_state('{self._get_first_state_name()}', '{body.value}')"
+
+            elif isinstance(body, ast.Name):
+                return f"update_state('{self._get_first_state_name()}', '{body.id}')"
+
+            return self._compile_expr_to_js(body)
+
         elif isinstance(node, ast.Call):
             return self._compile_call_to_js(node)
+
         return ""
+
+    def _get_first_state_name(self) -> str:
+        """Get the first state field name for reset operations."""
+        if self.state_fields:
+            return next(iter(self.state_fields.keys()))
+        return "state"
 
     def _compile_call_to_js(self, node: ast.Call) -> str:
         if isinstance(node.func, ast.Attribute):
-            obj = self._compile_expr_to_js(node.func.value)
             method = node.func.attr
             args = [self._compile_expr_to_js(arg) for arg in node.args]
             return f"update_state('{method}', {', '.join(args)})"
@@ -220,6 +313,8 @@ class OntaicCompiler:
             op = self._get_js_unaryop(node.op)
             return f"({op}{operand})"
         elif isinstance(node, ast.Constant):
+            if isinstance(node.value, bool):
+                return "true" if node.value else "false"
             return json.dumps(node.value)
         elif isinstance(node, ast.Name):
             return node.id

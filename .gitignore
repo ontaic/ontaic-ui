@@ -9,3 +9,5 @@ __pycache__
 .env.local
 .DS_Store
 Thumbs.db
+test_schema.json
+*.pytest_cache
