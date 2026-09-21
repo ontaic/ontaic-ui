@@ -18,6 +18,8 @@ from ontaic.database import Database, Repository, UserManager, PostManager, init
 from ontaic.auth import AuthManager, User, Session, CookieAuth, JWTAuth
 from ontaic.api import ApiClient, UsersApi, PostsApi, AuthApi, create_api_client
 from ontaic.upload import FileUploader, ImageUploader, DocumentUploader, UploadComponent
+from ontaic.theme import ThemeManager, ThemeToggle, ThemeSelector, LIGHT_THEME, DARK_THEME
+from ontaic.websocket_server import WebSocketServer, WebSocketClient
 from ontaic.watcher import FileWatcher
 from ontaic.compiler import OntaicCompiler
 from ontaic.ai import (
@@ -57,6 +59,10 @@ __all__ = [
     "ApiClient", "UsersApi", "PostsApi", "AuthApi", "create_api_client",
     # Upload
     "FileUploader", "ImageUploader", "DocumentUploader", "UploadComponent",
+    # Theme
+    "ThemeManager", "ThemeToggle", "ThemeSelector", "LIGHT_THEME", "DARK_THEME",
+    # WebSocket
+    "WebSocketServer", "WebSocketClient",
     # Utilities
     "FileWatcher", "OntaicCompiler",
     # AI
