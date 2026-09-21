@@ -26,6 +26,20 @@ from ontaic.charts import (
     PolarAreaChart, BubbleChart, ScatterChart, ChartDataset, ChartOptions,
     StatCard, ProgressBar, MetricCard, Gauge, Timeline,
 )
+from ontaic.animation import (
+    AnimationManager, AnimatedElement, FadeIn, SlideIn, ScaleIn,
+    Spinner, Skeleton, Collapse, Tabs, Carousel,
+    FADE_IN, SLIDE_IN_UP, SCALE_IN, BOUNCE, SPIN, PULSE, SHAKE,
+)
+from ontaic.accessibility import (
+    AriaAttributes, AccessibleComponent, AccessibleButton, AccessibleInput,
+    AccessibleSelect, AccessibleCheckbox, AccessibleRadio, AccessibleModal,
+    AccessibleAlert, SkipLink, LiveRegion, generate_keyboard_nav_js, sr_only,
+)
+from ontaic.extra_components import (
+    Accordion, Breadcrumb, Pagination, Tooltip, Popover,
+    Alert, Avatar, Tag, StatusDot, EmptyState,
+)
 from ontaic.watcher import FileWatcher
 from ontaic.compiler import OntaicCompiler
 from ontaic.ai import (
@@ -75,6 +89,17 @@ __all__ = [
     "Chart", "LineChart", "BarChart", "PieChart", "DoughnutChart", "RadarChart",
     "PolarAreaChart", "BubbleChart", "ScatterChart", "ChartDataset", "ChartOptions",
     "StatCard", "ProgressBar", "MetricCard", "Gauge", "Timeline",
+    # Animation
+    "AnimationManager", "AnimatedElement", "FadeIn", "SlideIn", "ScaleIn",
+    "Spinner", "Skeleton", "Collapse", "Tabs", "Carousel",
+    "FADE_IN", "SLIDE_IN_UP", "SCALE_IN", "BOUNCE", "SPIN", "PULSE", "SHAKE",
+    # Accessibility
+    "AriaAttributes", "AccessibleComponent", "AccessibleButton", "AccessibleInput",
+    "AccessibleSelect", "AccessibleCheckbox", "AccessibleRadio", "AccessibleModal",
+    "AccessibleAlert", "SkipLink", "LiveRegion", "generate_keyboard_nav_js", "sr_only",
+    # Components
+    "Accordion", "Breadcrumb", "Pagination", "Tooltip", "Popover",
+    "Alert", "Avatar", "Tag", "StatusDot", "EmptyState",
     # Utilities
     "FileWatcher", "OntaicCompiler",
     # AI
