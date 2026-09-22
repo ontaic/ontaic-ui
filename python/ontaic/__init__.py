@@ -167,6 +167,23 @@ from ontaic.chartbuilder import (
     ChartBuilder, ChartType, ChartTheme, ChartDataset, ChartOptions,
     ChartAnimation, create_chart_builder, chart_dataset, chart_options,
 )
+from ontaic.viewer3d import (
+    Viewer3D, SceneType, ObjectType, ViewMode, Material, Position, Rotation, Scale,
+    SceneObject, CameraConfig, LightConfig,
+    create_viewer_3d, scene_object, camera_config, light_config,
+)
+from ontaic.flowchart import (
+    FlowChart, FlowNode, FlowEdge, NodeShape, NodeStyle, EdgeType, LayoutDirection,
+    create_flow_chart, flow_node, flow_edge,
+)
+from ontaic.mindmap import (
+    MindMap, MindNode, LayoutType, NodeShape as MindNodeShape,
+    create_mind_map, mind_node,
+)
+from ontaic.mapcomponent import (
+    MapComponent, MapTile, MarkerIcon, LatLng, Marker, Polyline, Polygon, Circle,
+    create_map, lat_lng, map_marker,
+)
 
 __version__ = "0.1.0"
 __all__ = [
@@ -315,4 +332,17 @@ __all__ = [
     # Chart Builder
     "ChartBuilder", "ChartType", "ChartTheme", "ChartDataset", "ChartOptions",
     "ChartAnimation", "create_chart_builder", "chart_dataset", "chart_options",
+    # 3D Viewer
+    "Viewer3D", "SceneType", "ObjectType", "ViewMode", "Material", "Position", "Rotation", "Scale",
+    "SceneObject", "CameraConfig", "LightConfig",
+    "create_viewer_3d", "scene_object", "camera_config", "light_config",
+    # Flow Chart
+    "FlowChart", "FlowNode", "FlowEdge", "NodeShape", "NodeStyle", "EdgeType", "LayoutDirection",
+    "create_flow_chart", "flow_node", "flow_edge",
+    # Mind Map
+    "MindMap", "MindNode", "LayoutType",
+    "create_mind_map", "mind_node",
+    # Map
+    "MapComponent", "MapTile", "MarkerIcon", "LatLng", "Marker", "Polyline", "Polygon", "Circle",
+    "create_map", "lat_lng", "map_marker",
 ]
