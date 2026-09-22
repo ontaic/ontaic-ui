@@ -127,6 +127,26 @@ from ontaic.notifications import (
     NotificationSize, NotificationAction,
     create_notification_manager, notify_success, notify_error, notify_warning, notify_info,
 )
+from ontaic.codeeditor import (
+    CodeEditor, CodeLanguage, EditorTheme, EditorFontSize, EditorKeyBinding, EditorSnippet,
+    create_code_editor, code_snippet, key_binding,
+)
+from ontaic.calendar import (
+    Calendar, CalendarEvent, CalendarView, EventColor, CalendarSlot,
+    create_calendar, calendar_event,
+)
+from ontaic.treeview import (
+    TreeView, TreeNode, TreeSelectionMode,
+    create_tree_view, tree_node,
+)
+from ontaic.timeline import (
+    Timeline, TimelineItem, TimelineOrientation, TimelineAlign, TimelineSize, TimelineDot,
+    create_timeline, timeline_item, timeline_dot,
+)
+from ontaic.kanban import (
+    KanbanBoard, KanbanColumn, KanbanCard, KanbanCardSize, KanbanPriority,
+    create_kanban, kanban_column, kanban_card,
+)
 
 __version__ = "0.1.0"
 __all__ = [
@@ -245,4 +265,19 @@ __all__ = [
     "NotificationManager", "Notification", "NotificationType", "NotificationPosition",
     "NotificationSize", "NotificationAction",
     "create_notification_manager", "notify_success", "notify_error", "notify_warning", "notify_info",
+    # Code Editor
+    "CodeEditor", "CodeLanguage", "EditorTheme", "EditorFontSize", "EditorKeyBinding", "EditorSnippet",
+    "create_code_editor", "code_snippet", "key_binding",
+    # Calendar
+    "Calendar", "CalendarEvent", "CalendarView", "EventColor", "CalendarSlot",
+    "create_calendar", "calendar_event",
+    # Tree View
+    "TreeView", "TreeNode", "TreeSelectionMode",
+    "create_tree_view", "tree_node",
+    # Timeline
+    "Timeline", "TimelineItem", "TimelineOrientation", "TimelineAlign", "TimelineSize", "TimelineDot",
+    "create_timeline", "timeline_item", "timeline_dot",
+    # Kanban
+    "KanbanBoard", "KanbanColumn", "KanbanCard", "KanbanCardSize", "KanbanPriority",
+    "create_kanban", "kanban_column", "kanban_card",
 ]
