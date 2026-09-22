@@ -106,6 +106,27 @@ from ontaic.datepicker import (
     DatePicker, PickerMode, PickerSize, PickerPreset, PRESETS,
     create_date_picker, create_date_range_picker,
 )
+from ontaic.fileupload import (
+    FileUpload, UploadedFile, UploadConfig, UploadStatus, FileType,
+    create_file_upload, create_image_upload,
+)
+from ontaic.colorpicker import (
+    ColorPicker, ColorFormat, ColorPreset, DEFAULT_PRESETS,
+    create_color_picker, color_preset,
+)
+from ontaic.wizard import (
+    FormWizard, WizardStep, WizardStepStatus, WizardLayout,
+    create_wizard, wizard_step,
+)
+from ontaic.markdown import (
+    MarkdownEditor, MarkdownViewMode, MarkdownToolbarItem, DEFAULT_TOOLBAR,
+    create_markdown_editor,
+)
+from ontaic.notifications import (
+    NotificationManager, Notification, NotificationType, NotificationPosition,
+    NotificationSize, NotificationAction,
+    create_notification_manager, notify_success, notify_error, notify_warning, notify_info,
+)
 
 __version__ = "0.1.0"
 __all__ = [
@@ -208,4 +229,20 @@ __all__ = [
     # Date Picker
     "DatePicker", "PickerMode", "PickerSize", "PickerPreset", "PRESETS",
     "create_date_picker", "create_date_range_picker",
+    # File Upload
+    "FileUpload", "UploadedFile", "UploadConfig", "UploadStatus", "FileType",
+    "create_file_upload", "create_image_upload",
+    # Color Picker
+    "ColorPicker", "ColorFormat", "ColorPreset", "DEFAULT_PRESETS",
+    "create_color_picker", "color_preset",
+    # Wizard
+    "FormWizard", "WizardStep", "WizardStepStatus", "WizardLayout",
+    "create_wizard", "wizard_step",
+    # Markdown
+    "MarkdownEditor", "MarkdownViewMode", "MarkdownToolbarItem", "DEFAULT_TOOLBAR",
+    "create_markdown_editor",
+    # Notifications
+    "NotificationManager", "Notification", "NotificationType", "NotificationPosition",
+    "NotificationSize", "NotificationAction",
+    "create_notification_manager", "notify_success", "notify_error", "notify_warning", "notify_info",
 ]
