@@ -1,0 +1,2033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ontaic — What you get by default</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body { font-family: Inter, system-ui, sans-serif; }
+
+.calendar {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: white;
+}
+
+.calendar-label {
+    padding: 1rem;
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.calendar-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.calendar-nav-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #d1d5db;
+    background: white;
+    border-radius: 0.375rem;
+    cursor: pointer;
+}
+
+.calendar-nav-btn:hover {
+    background: #f9fafb;
+}
+
+.calendar-title {
+    font-weight: 600;
+    color: #111827;
+    min-width: 150px;
+    text-align: center;
+}
+
+.calendar-today-btn {
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #d1d5db;
+    background: white;
+    border-radius: 0.375rem;
+    cursor: pointer;
+}
+
+.calendar-today-btn:hover {
+    background: #f9fafb;
+}
+
+.calendar-views {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.calendar-view-btn {
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #d1d5db;
+    background: white;
+    border-radius: 0.375rem;
+    cursor: pointer;
+}
+
+.calendar-view-btn.active {
+    background: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+}
+
+.calendar-body {
+    flex: 1;
+    overflow: auto;
+}
+
+.calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.calendar-weekday {
+    padding: 0.75rem;
+    text-align: center;
+    font-weight: 500;
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.calendar-day {
+    min-height: 100px;
+    padding: 0.5rem;
+    border: 1px solid #e5e7eb;
+    cursor: pointer;
+}
+
+.calendar-day:hover {
+    background: #f9fafb;
+}
+
+.calendar-day.today {
+    background: #eff6ff;
+}
+
+.calendar-day.selected {
+    background: #dbeafe;
+}
+
+.calendar-day.empty {
+    background: #f9fafb;
+    cursor: default;
+}
+
+.day-number {
+    font-weight: 500;
+    color: #374151;
+}
+
+.calendar-event {
+    padding: 0.125rem 0.375rem;
+    margin-top: 0.25rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+
+.event-blue { background: #dbeafe; color: #1e40af; }
+.event-green { background: #d1fae5; color: #065f46; }
+.event-red { background: #fee2e2; color: #991b1b; }
+.event-yellow { background: #fef3c7; color: #92400e; }
+.event-purple { background: #ede9fe; color: #5b21b6; }
+.event-pink { background: #fce7f3; color: #9d174d; }
+.event-gray { background: #f3f4f6; color: #374151; }
+
+.calendar-more {
+    font-size: 0.75rem;
+    color: #6b7280;
+    padding: 0.125rem 0.375rem;
+}
+
+.calendar-agenda {
+    padding: 1rem;
+}
+
+.calendar-agenda.empty {
+    text-align: center;
+    color: #9ca3af;
+}
+
+.agenda-date {
+    font-weight: 600;
+    color: #374151;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.agenda-event {
+    display: flex;
+    gap: 1rem;
+    padding: 0.75rem;
+    border-radius: 0.375rem;
+    margin: 0.5rem 0;
+    cursor: pointer;
+}
+
+.agenda-event:hover {
+    opacity: 0.9;
+}
+
+.event-time {
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+.event-title {
+    font-weight: 500;
+}
+
+.event-location {
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+.calendar-week-header-row {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.calendar-week-header {
+    padding: 0.75rem;
+    text-align: center;
+}
+
+.calendar-week-header.today {
+    background: #eff6ff;
+}
+
+.day-name {
+    display: block;
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.day-num {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+.calendar-time-grid {
+    display: flex;
+    flex-direction: column;
+}
+
+.calendar-time-slot {
+    display: flex;
+    align-items: flex-start;
+    min-height: 60px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.time-label {
+    width: 60px;
+    padding: 0.5rem;
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.slot-events {
+    flex: 1;
+    padding: 0.25rem;
+}
+
+.calendar-day-view {
+    padding: 1rem;
+}
+
+.calendar-day-title {
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 1rem;
+}
+
+
+.kanban-board {
+    display: flex;
+    flex-direction: column;
+    background: #f3f4f6;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.kanban-label {
+    padding: 1rem;
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #111827;
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.kanban-search {
+    padding: 0.75rem 1rem;
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.kanban-search-input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+}
+
+.kanban-columns {
+    display: flex;
+    flex: 1;
+    overflow-x: auto;
+    padding: 1rem;
+    gap: 1rem;
+}
+
+.kanban-column {
+    flex: 0 0 300px;
+    background: white;
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+}
+
+.kanban-column.drag-over {
+    background: #eff6ff;
+}
+
+.kanban-column-header {
+    padding: 0.75rem 1rem;
+    border-top: 3px solid #3b82f6;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.column-title {
+    flex: 1;
+    font-weight: 600;
+    color: #374151;
+}
+
+.column-count {
+    background: #e5e7eb;
+    padding: 0.125rem 0.5rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.column-limit {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.column-limit.over-limit {
+    color: #ef4444;
+    font-weight: 600;
+}
+
+.kanban-cards {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0.5rem;
+    min-height: 100px;
+}
+
+.kanban-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    transition: box-shadow 0.2s;
+}
+
+.kanban-card:hover {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.kanban-card.dragging {
+    opacity: 0.5;
+}
+
+.card-priority {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
+
+.priority-low { background: #10b981; }
+.priority-medium { background: #f59e0b; }
+.priority-high { background: #f97316; }
+.priority-urgent { background: #ef4444; }
+
+.card-title {
+    margin: 0 0 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #111827;
+}
+
+.card-description {
+    margin: 0 0 0.5rem;
+    font-size: 0.75rem;
+    color: #6b7280;
+    line-height: 1.4;
+}
+
+.card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.card-tag {
+    padding: 0.125rem 0.375rem;
+    background: #f3f4f6;
+    border-radius: 0.25rem;
+    font-size: 0.625rem;
+    color: #6b7280;
+}
+
+.card-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.card-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #3b82f6;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.625rem;
+    font-weight: 600;
+}
+
+.card-due {
+    color: #f59e0b;
+}
+
+.card-checklist {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-left: auto;
+}
+
+.checklist-progress {
+    width: 40px;
+    height: 4px;
+    background: #e5e7eb;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.checklist-bar {
+    height: 100%;
+    background: #10b981;
+}
+
+.checklist-text {
+    font-size: 0.625rem;
+}
+
+.kanban-add-card {
+    padding: 0.75rem;
+    background: transparent;
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    color: #6b7280;
+    cursor: pointer;
+    text-align: left;
+}
+
+.kanban-add-card:hover {
+    background: #f9fafb;
+    color: #374151;
+}
+
+.kanban-help {
+    padding: 0.75rem 1rem;
+    margin: 0;
+    font-size: 0.875rem;
+    color: #6b7280;
+    background: white;
+    border-top: 1px solid #e5e7eb;
+}
+
+/* Small cards */
+.kanban-small .kanban-card {
+    padding: 0.5rem;
+}
+
+.kanban-small .card-title {
+    font-size: 0.8125rem;
+}
+
+.kanban-small .card-description {
+    display: none;
+}
+
+/* Large cards */
+.kanban-large .kanban-card {
+    padding: 1rem;
+}
+
+.kanban-large .card-title {
+    font-size: 1rem;
+}
+
+
+.timeline {
+    padding: 1rem 0;
+}
+
+.timeline-label {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 1.5rem;
+}
+
+.timeline-track {
+    position: relative;
+    padding: 1rem 0;
+}
+
+.timeline-vertical .timeline-track {
+    padding-left: 2rem;
+}
+
+.timeline-vertical.timeline-left .timeline-track {
+    padding-left: 2rem;
+}
+
+.timeline-vertical.timeline-right .timeline-track {
+    padding-left: 0;
+    padding-right: 2rem;
+}
+
+.timeline-vertical.timeline-center .timeline-track {
+    padding-left: 50%;
+}
+
+.timeline-horizontal .timeline-track {
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+}
+
+/* Timeline item */
+.timeline-item {
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.timeline-horizontal .timeline-item {
+    flex: 0 0 300px;
+    margin-right: 2rem;
+    margin-bottom: 0;
+}
+
+.timeline-vertical .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -2rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #e5e7eb;
+}
+
+.timeline-vertical.timeline-right .timeline-item::before {
+    left: auto;
+    right: -2rem;
+}
+
+.timeline-vertical.timeline-center .timeline-item::before {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.timeline-item:last-child::before {
+    display: none;
+}
+
+/* Dot */
+.timeline-dot {
+    position: absolute;
+    left: -2rem;
+    top: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: white;
+    z-index: 1;
+}
+
+.timeline-vertical.timeline-right .timeline-dot {
+    left: auto;
+    right: -2rem;
+}
+
+.timeline-vertical.timeline-center .timeline-dot {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.dot-blue { background: #3b82f6; }
+.dot-green { background: #10b981; }
+.dot-red { background: #ef4444; }
+.dot-yellow { background: #f59e0b; }
+.dot-purple { background: #8b5cf6; }
+.dot-gray { background: #6b7280; }
+
+/* Body */
+.timeline-body {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+
+.timeline-item:hover .timeline-body {
+    border-color: #d1d5db;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Header */
+.timeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+}
+
+.timeline-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+.timeline-date {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.timeline-time {
+    font-size: 0.75rem;
+    color: #9ca3af;
+}
+
+/* Description */
+.timeline-description {
+    color: #6b7280;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+/* Content */
+.timeline-content {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #f3f4f6;
+}
+
+/* Tags */
+.timeline-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.timeline-tag {
+    padding: 0.25rem 0.5rem;
+    background: #f3f4f6;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+/* Link */
+.timeline-link {
+    display: inline-block;
+    margin-top: 0.75rem;
+    color: #3b82f6;
+    font-size: 0.875rem;
+    text-decoration: none;
+}
+
+.timeline-link:hover {
+    text-decoration: underline;
+}
+
+/* Image */
+.timeline-image {
+    margin-top: 0.75rem;
+    max-width: 100%;
+    border-radius: 0.375rem;
+}
+
+/* Animation */
+.timeline-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.timeline-item.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.timeline-horizontal .timeline-item {
+    transform: translateX(20px);
+}
+
+.timeline-horizontal .timeline-item.animate-in {
+    transform: translateX(0);
+}
+
+/* Size variants */
+.timeline-small .timeline-dot {
+    width: 20px;
+    height: 20px;
+    font-size: 0.625rem;
+}
+
+.timeline-small .timeline-body {
+    padding: 0.75rem;
+}
+
+.timeline-small .timeline-title {
+    font-size: 0.875rem;
+}
+
+.timeline-large .timeline-dot {
+    width: 32px;
+    height: 32px;
+    font-size: 0.875rem;
+}
+
+.timeline-large .timeline-body {
+    padding: 1.25rem;
+}
+
+.timeline-large .timeline-title {
+    font-size: 1.125rem;
+}
+
+.timeline-help {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+
+.datagrid {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: white;
+}
+
+.grid-label {
+    padding: 1rem;
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #111827;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.grid-wrapper {
+    flex: 1;
+    overflow: auto;
+    position: relative;
+}
+
+.grid-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.grid-thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.grid-th {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: #374151;
+    background: #f9fafb;
+    border-bottom: 2px solid #e5e7eb;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+}
+
+.grid-th:hover {
+    background: #f3f4f6;
+}
+
+.grid-th.sort-asc::after {
+    content: ' ▲';
+}
+
+.grid-th.sort-desc::after {
+    content: ' ▼';
+}
+
+.grid-th-checkbox,
+.grid-td-checkbox {
+    width: 40px;
+    text-align: center;
+}
+
+.grid-th-num,
+.grid-td-num {
+    width: 50px;
+    text-align: center;
+    color: #6b7280;
+}
+
+.grid-tbody {
+    overflow: auto;
+}
+
+.grid-row {
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.grid-row:hover {
+    background: #f9fafb;
+}
+
+.grid-row-stripe {
+    background: #fafafa;
+}
+
+.grid-row-stripe:hover {
+    background: #f3f4f6;
+}
+
+.grid-td {
+    padding: 0.75rem 1rem;
+    color: #374151;
+}
+
+.grid-td-editable {
+    cursor: pointer;
+}
+
+.grid-td-editable:hover {
+    background: #eff6ff;
+}
+
+.text-left { text-align: left; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+
+.grid-tfoot {
+    border-top: 2px solid #e5e7eb;
+    background: #f9fafb;
+}
+
+.grid-pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+}
+
+.grid-page-info {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.grid-page-buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.grid-page-btn {
+    padding: 0.375rem 0.625rem;
+    border: 1px solid #d1d5db;
+    background: white;
+    border-radius: 0.25rem;
+    cursor: pointer;
+}
+
+.grid-page-btn:hover:not(:disabled) {
+    background: #f9fafb;
+}
+
+.grid-page-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.grid-page-current {
+    font-size: 0.875rem;
+    color: #374151;
+}
+
+.grid-empty {
+    text-align: center;
+    padding: 3rem;
+    color: #9ca3af;
+}
+
+.grid-loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+}
+
+.grid-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #e5e7eb;
+    border-top-color: #3b82f6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.grid-compact .grid-th,
+.grid-compact .grid-td {
+    padding: 0.5rem 0.75rem;
+}
+
+.grid-th-frozen,
+.grid-td-frozen {
+    position: sticky;
+    left: 0;
+    background: inherit;
+    z-index: 5;
+}
+
+.grid-th-frozen {
+    z-index: 15;
+}
+
+
+.chart-builder {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background: white;
+}
+
+.chart-builder-label {
+    padding: 1rem;
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #111827;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.chart-builder-panel {
+    padding: 1rem;
+    background: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.chart-type-selector,
+.chart-datasets,
+.chart-export {
+    margin-bottom: 1rem;
+}
+
+.chart-type-selector label,
+.chart-datasets label,
+.chart-export label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #374151;
+    font-size: 0.875rem;
+}
+
+.chart-type-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.chart-type-btn {
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #d1d5db;
+    background: white;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+}
+
+.chart-type-btn.active {
+    background: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+}
+
+.chart-type-btn:hover:not(.active) {
+    background: #f3f4f6;
+}
+
+.chart-add-dataset {
+    padding: 0.375rem 0.75rem;
+    border: 1px dashed #d1d5db;
+    background: white;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    color: #6b7280;
+}
+
+.chart-add-dataset:hover {
+    border-color: #3b82f6;
+    color: #3b82f6;
+}
+
+.chart-export-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.chart-export-btn {
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #d1d5db;
+    background: white;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.chart-export-btn:hover {
+    background: #f3f4f6;
+}
+
+.chart-canvas-container {
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+}
+
+.chart-canvas-container canvas {
+    max-width: 100%;
+}
+
+.chart-builder-help {
+    padding: 0.75rem 1rem;
+    margin: 0;
+    font-size: 0.875rem;
+    color: #6b7280;
+    border-top: 1px solid #e5e7eb;
+}
+
+/* Themes */
+.theme-dark .chart-builder {
+    background: #1f2937;
+    border-color: #374151;
+}
+
+.theme-dark .chart-builder-label {
+    color: #f9fafb;
+    border-color: #374151;
+}
+
+.theme-dark .chart-builder-panel {
+    background: #111827;
+    border-color: #374151;
+}
+
+.theme-dark .chart-type-btn,
+.theme-dark .chart-export-btn {
+    background: #374151;
+    border-color: #4b5563;
+    color: #f9fafb;
+}
+
+.theme-minimal .chart-builder {
+    border: none;
+}
+
+.theme-minimal .chart-builder-panel {
+    background: transparent;
+    border-bottom: none;
+}
+
+
+.qr-container {
+    display: inline-block;
+    text-align: center;
+}
+
+.qr-label {
+    margin: 0 0 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+.qr-wrapper {
+    position: relative;
+    display: inline-block;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background: white;
+}
+
+.qr-code {
+    display: block;
+}
+
+.qr-logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: 0.25rem;
+    padding: 4px;
+}
+
+.qr-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.qr-download-btn {
+    margin-top: 0.5rem;
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #d1d5db;
+    background: white;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+}
+
+.qr-download-btn:hover {
+    background: #f3f4f6;
+}
+
+
+.media-player {
+    display: inline-block;
+}
+
+.player-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+.player-container {
+    position: relative;
+    background: #000;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.player-media {
+    display: block;
+    width: 100%;
+}
+
+.player-small .player-media {
+    max-width: 400px;
+}
+
+.player-medium .player-media {
+    max-width: 640px;
+}
+
+.player-large .player-media {
+    max-width: 960px;
+}
+
+.player-fullscreen .player-media {
+    width: 100vw;
+    height: 100vh;
+}
+
+.player-controls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    color: white;
+}
+
+.player-btn {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 0.25rem;
+}
+
+.player-btn:hover {
+    color: #3b82f6;
+}
+
+.player-progress {
+    flex: 1;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.player-progress:hover {
+    height: 6px;
+}
+
+.player-progress-bar {
+    height: 100%;
+    background: #3b82f6;
+    border-radius: 2px;
+    width: 0%;
+}
+
+.player-time {
+    font-size: 0.875rem;
+    font-family: monospace;
+}
+
+.player-volume {
+    width: 80px;
+}
+
+.player-download {
+    text-decoration: none;
+}
+
+.player-help {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.media-player.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Audio player specific */
+.media-player.audio .player-container {
+    background: #f3f4f6;
+    border-radius: 2rem;
+    padding: 1rem 1.5rem;
+}
+
+.media-player.audio .player-controls {
+    position: static;
+    background: transparent;
+    padding: 0;
+}
+
+.media-player.audio .player-btn {
+    color: #374151;
+}
+
+.media-player.audio .player-progress {
+    background: #d1d5db;
+}
+
+.media-player.audio .player-progress-bar {
+    background: #3b82f6;
+}
+
+.media-player.audio .player-time {
+    color: #6b7280;
+}
+
+
+.notification-container {
+    position: fixed;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 100vh;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.notification-container > * {
+    pointer-events: auto;
+}
+
+.notification-top-right {
+    top: 1rem;
+    right: 1rem;
+    align-items: flex-end;
+}
+
+.notification-top-left {
+    top: 1rem;
+    left: 1rem;
+    align-items: flex-start;
+}
+
+.notification-top-center {
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    align-items: center;
+}
+
+.notification-bottom-right {
+    bottom: 1rem;
+    right: 1rem;
+    align-items: flex-end;
+    flex-direction: column-reverse;
+}
+
+.notification-bottom-left {
+    bottom: 1rem;
+    left: 1rem;
+    align-items: flex-start;
+    flex-direction: column-reverse;
+}
+
+.notification-bottom-center {
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    align-items: center;
+    flex-direction: column-reverse;
+}
+
+.notification {
+    display: flex;
+    flex-direction: column;
+    min-width: 320px;
+    max-width: 450px;
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    transform: translateX(100%);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.notification-top-left .notification,
+.notification-bottom-left .notification {
+    transform: translateX(-100%);
+}
+
+.notification-top-center .notification,
+.notification-bottom-center .notification {
+    transform: translateY(-100%);
+}
+
+.notification.show {
+    transform: translateX(0) translateY(0);
+    opacity: 1;
+}
+
+.notification.hide {
+    transform: translateX(100%);
+    opacity: 0;
+}
+
+.notification-top-left .notification.hide,
+.notification-bottom-left .notification.hide {
+    transform: translateX(-100%);
+}
+
+.notification-content {
+    display: flex;
+    align-items: flex-start;
+    padding: 1rem;
+    gap: 0.75rem;
+}
+
+.notification-icon {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+}
+
+.notification-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.notification-success .notification-icon {
+    color: #10b981;
+}
+
+.notification-error .notification-icon {
+    color: #ef4444;
+}
+
+.notification-warning .notification-icon {
+    color: #f59e0b;
+}
+
+.notification-info .notification-icon {
+    color: #3b82f6;
+}
+
+.notification-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.notification-title {
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 0.25rem;
+}
+
+.notification-message {
+    color: #6b7280;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+.notification-close {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    font-size: 1.25rem;
+    line-height: 1;
+    border-radius: 0.25rem;
+}
+
+.notification-close:hover {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.notification-progress {
+    height: 3px;
+    background: currentColor;
+    opacity: 0.2;
+    width: 100%;
+}
+
+.notification-success .notification-progress {
+    color: #10b981;
+}
+
+.notification-error .notification-progress {
+    color: #ef4444;
+}
+
+.notification-warning .notification-progress {
+    color: #f59e0b;
+}
+
+.notification-info .notification-progress {
+    color: #3b82f6;
+}
+
+.notification.paused .notification-progress {
+    transition: none !important;
+}
+
+/* Small size */
+.notification-small .notification-content {
+    padding: 0.75rem;
+}
+
+.notification-small .notification-title {
+    font-size: 0.875rem;
+}
+
+.notification-small .notification-message {
+    font-size: 0.8125rem;
+}
+
+/* Large size */
+.notification-large .notification-content {
+    padding: 1.25rem;
+}
+
+.notification-large .notification-title {
+    font-size: 1rem;
+}
+
+.notification-large .notification-message {
+    font-size: 0.9375rem;
+}
+
+</style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+<!-- NAVBAR: real SDK output -->
+<div class="max-w-7xl mx-auto px-4 pt-4">
+<nav class="flex items-center justify-between bg-white shadow-sm px-6 py-4">
+            <a href="/" data-link class="text-xl font-bold text-gray-900">
+                ⚡ Ontaic
+            </a>
+            <div class="flex items-center space-x-1">
+                <a href="/" data-link class="px-3 py-2 text-sm font-medium transition-colors "
+            x-bind:class="window.location.pathname === '/' ? 'text-blue-600 font-medium' : 'text-gray-600 hover:text-gray-900'"
+        >Features</a><a href="/docs" data-link class="px-3 py-2 text-sm font-medium transition-colors "
+            x-bind:class="window.location.pathname === '/docs' ? 'text-blue-600 font-medium' : 'text-gray-600 hover:text-gray-900'"
+        >Docs</a><a href="/examples" data-link class="px-3 py-2 text-sm font-medium transition-colors "
+            x-bind:class="window.location.pathname === '/examples' ? 'text-blue-600 font-medium' : 'text-gray-600 hover:text-gray-900'"
+        >Examples</a><a href="/pricing" data-link class="px-3 py-2 text-sm font-medium transition-colors "
+            x-bind:class="window.location.pathname === '/pricing' ? 'text-blue-600 font-medium' : 'text-gray-600 hover:text-gray-900'"
+        >Pricing</a>
+            </div>
+        </nav>
+</div>
+
+<!-- HERO (Tailwind defaults, same classes SDK emits) -->
+<header class="max-w-7xl mx-auto px-4 py-16 text-center">
+  <div class="inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-sm mb-4">⚡ Open Source • Python • 53KB WASM • 0ms DOM</div>
+  <h1 class="text-4xl md:text-6xl font-bold mb-4">Build UIs in Python.<br>Ship at the speed of thought.</h1>
+  <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-8">This page is built <b>only</b> from Ontaic default designs — no custom CSS. Navbar, table, form, alerts, badges, avatars, accordion below are actual <code>render()</code> / <code>to_html()</code> output.</p>
+  <div class="flex justify-center gap-4">
+    <a href="#gallery" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">See defaults</a>
+    <a href="#code" class="px-6 py-3 border border-gray-300 rounded-lg hover:bg-white">View Python source</a>
+  </div>
+  <div class="mt-6 flex justify-center gap-2 flex-wrap">
+        <span class="inline-flex items-center font-medium rounded-full bg-green-100 text-green-800 px-2.5 py-0.5 text-sm ">
+            0ms
+        </span>
+         
+        <span class="inline-flex items-center font-medium rounded-full bg-blue-100 text-blue-800 px-2.5 py-0.5 text-sm ">
+            Python
+        </span>
+         
+        <span class="inline-flex items-center font-medium rounded-full bg-gray-100 text-gray-800 px-2.5 py-0.5 text-sm ">
+            53KB WASM
+        </span>
+         
+        <span class="inline-flex items-center font-medium rounded-full bg-yellow-100 text-yellow-800 px-2.5 py-0.5 text-sm ">
+            430+ components
+        </span>
+        </div>
+</header>
+
+<!-- COMPARISON: real Table output -->
+<section class="max-w-5xl mx-auto px-4 mb-12">
+  <h2 class="text-3xl font-semibold mb-2">Default Table</h2>
+  <p class="text-gray-600 mb-4"><code>Table(columns=..., data=..., striped=True).render()</code></p>
+  <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 rounded-lg">
+            <table class="min-w-full divide-y divide-gray-200 table-striped table-hover">
+                <thead class="bg-gray-50">
+                    <tr><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Feature</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ontaic</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Others</th></tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    <tr class="bg-white"><td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">DOM update</td><td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">0ms (WASM)</td><td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">200-500ms</td></tr><tr class="bg-gray-50"><td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Language</td><td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Pure Python</td><td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">JS / DSL</td></tr><tr class="bg-white"><td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Deploy</td><td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Static CDN</td><td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Server needed</td></tr><tr class="bg-gray-50"><td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Bundle</td><td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">53KB WASM</td><td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">MBs of JS</td></tr>
+                </tbody>
+            </table>
+        </div>
+</section>
+
+<!-- CHART: real Chart.js output -->
+<section class="max-w-5xl mx-auto px-4 mb-12 grid md:grid-cols-2 gap-8">
+  <div class="bg-white p-6 shadow-md rounded-xl">
+    <h3 class="text-xl font-medium mb-2">Default BarChart</h3>
+    
+        <div class="" style="width: 100%; height: 400px;">
+            <canvas id="chart-1911779036192"></canvas>
+        </div>
+        <script>
+        (function() {
+            const ctx = document.getElementById('chart-1911779036192').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ["Jan", "Feb", "Mar", "Apr", "May"],
+                    datasets: [{"label": "Signups", "data": [120, 200, 180, 320, 410], "borderWidth": 1, "fill": false, "backgroundColor": "#3b82f6"}]
+                },
+                options: {"responsive": true, "maintainAspectRatio": false}
+            });
+        })();
+        </script>
+        
+  </div>
+  <div class="bg-white p-6 shadow-md rounded-xl">
+    <h3 class="text-xl font-medium mb-2">Default signup form</h3>
+    <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Email <span class="text-red-500">*</span></label>
+            <input type="email" name="email" placeholder="you@company.com" value="" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none border-gray-300" />
+            
+            
+        </div><select name="role" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent "><option value="">Select an option</option><option value="dev" >Developer</option><option value="team" >Team</option><option value="enterprise" >Enterprise</option></select><label class="flex items-center cursor-pointer">
+            <input type="checkbox" name="news" checked class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+            <span class="ml-2 text-sm text-gray-700">Send me updates</span>
+        </label>
+    <button class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg">Create account</button>
+  </div>
+</section>
+
+<!-- ALERTS + AVATARS -->
+<section class="max-w-5xl mx-auto px-4 mb-12 grid md:grid-cols-2 gap-8">
+  <div class="space-y-4">
+    <h3 class="text-xl font-medium">Default Alerts</h3>
+    
+        <div class="flex items-start p-4 rounded-lg border bg-green-50 text-green-800 border-green-200 " role="alert">
+            
+            <div class="flex-1">
+                <h4 class="font-medium">Fast by default</h4>
+                <p class="text-sm">0ms DOM updates via Rust WASM.</p>
+            </div>
+            
+        </div>
+        
+        <div class="flex items-start p-4 rounded-lg border bg-blue-50 text-blue-800 border-blue-200 " role="alert">
+            
+            <div class="flex-1">
+                <h4 class="font-medium">Batteries included</h4>
+                <p class="text-sm">430+ exports and counting.</p>
+            </div>
+            
+        </div>
+        
+  </div>
+  <div>
+    <h3 class="text-xl font-medium mb-2">Default Avatars</h3>
+    <div class="flex gap-3 items-center bg-white p-4 shadow-md rounded-xl">
+            <div class="w-12 h-12 text-lg rounded-full bg-blue-500 text-white flex items-center justify-center font-medium ">
+                AL
+            </div>
+             
+            <div class="w-12 h-12 text-lg rounded-full bg-blue-500 text-white flex items-center justify-center font-medium ">
+                GH
+            </div>
+             
+            <div class="w-12 h-12 text-lg rounded-full bg-blue-500 text-white flex items-center justify-center font-medium ">
+                LT
+            </div>
+            </div>
+    <p class="text-sm text-gray-500 mt-2"><code>Avatar(name=...).render()</code> — initials fallback, no image needed.</p>
+  </div>
+</section>
+
+<!-- GALLERY: heavier defaults -->
+<section id="gallery" class="max-w-7xl mx-auto px-4 mb-12">
+  <h2 class="text-3xl font-semibold mb-2">More defaults, same page</h2>
+  <p class="text-gray-600 mb-6">Every block below is SDK default CSS + HTML. No theme overrides.</p>
+  <div class="grid md:grid-cols-2 gap-8">
+    <div class="bg-white p-4 shadow-md rounded-xl overflow-auto">
+      <h3 class="font-medium mb-2">DataGrid.to_html()</h3>
+      <div class="datagrid" style="height: 500px;">
+            
+            <div class="grid-wrapper">
+                <table class="grid-table">
+                    <thead class="grid-thead"><tr><th class="grid-th grid-th-checkbox"><input type="checkbox" class="grid-select-all"></th><th class="grid-th" data-field="name">Name</th><th class="grid-th" data-field="role">Role</th></tr></thead>
+                    <tbody class="grid-tbody"><tr class="grid-row" data-index="0"><td class="grid-td grid-td-checkbox"><input type="checkbox" class="grid-row-select" data-index="0"></td><td class="grid-td text-left" data-field="name" data-row="0">Ada</td><td class="grid-td text-left" data-field="role" data-row="0">Admin</td></tr><tr class="grid-row grid-row-stripe" data-index="1"><td class="grid-td grid-td-checkbox"><input type="checkbox" class="grid-row-select" data-index="1"></td><td class="grid-td text-left" data-field="name" data-row="1">Grace</td><td class="grid-td text-left" data-field="role" data-row="1">User</td></tr></tbody>
+                    <tfoot class="grid-tfoot"><tr>
+                <td colspan="4">
+                    <div class="grid-pagination">
+                        <span class="grid-page-info">Showing 1-0 of 0</span>
+                        <div class="grid-page-buttons">
+                            <button class="grid-page-btn" data-page="1" disabled>&laquo;</button>
+                            <button class="grid-page-btn" data-page="0" disabled>&lsaquo;</button>
+                            <span class="grid-page-current">1 / 0</span>
+                            <button class="grid-page-btn" data-page="2" disabled>&rsaquo;</button>
+                            <button class="grid-page-btn" data-page="0" disabled>&raquo;</button>
+                        </div>
+                    </div>
+                </td>
+            </tr></tfoot>
+                </table>
+                
+            </div>
+        </div>
+    </div>
+    <div class="bg-white p-4 shadow-md rounded-xl">
+      <h3 class="font-medium mb-2">Calendar.to_html()</h3>
+      <div class="calendar" style="height: 600px;">
+            
+            <div class="calendar-header">
+                <div class="calendar-nav">
+            <button type="button" class="calendar-nav-btn" data-action="prev">&lt;</button>
+            <span class="calendar-title">September 2026</span>
+            <button type="button" class="calendar-nav-btn" data-action="next">&gt;</button>
+            <button type="button" class="calendar-today-btn">Today</button>
+        </div>
+                <div class="calendar-views">
+            <button type="button" class="calendar-view-btn active" data-view="month">Month</button>
+            <button type="button" class="calendar-view-btn" data-view="week">Week</button>
+            <button type="button" class="calendar-view-btn" data-view="day">Day</button>
+            <button type="button" class="calendar-view-btn" data-view="agenda">Agenda</button>
+        </div>
+            </div>
+            <div class="calendar-body">
+                <div class="calendar-month"><div class="calendar-weekdays"><div class="calendar-weekday">Sun</div><div class="calendar-weekday">Mon</div><div class="calendar-weekday">Tue</div><div class="calendar-weekday">Wed</div><div class="calendar-weekday">Thu</div><div class="calendar-weekday">Fri</div><div class="calendar-weekday">Sat</div></div><div class="calendar-days"><div class="calendar-day empty"></div><div class="calendar-day" data-date="2026-09-01T00:00:00">
+                    <span class="day-number">1</span>
+                    <div class="day-events"></div>
+                </div><div class="calendar-day" data-date="2026-09-02T00:00:00">
+                    <span class="day-number">2</span>
+                    <div class="day-events"></div>
+                </div><div class="calendar-day" data-date="2026-09-03T00:00:00">
+                    <span class="day-number">3</span>
+                    <div class="day-events"></div>
+                </div><div class="calendar-day" data-date="2026-09-04T00:00:00">
+                    <span class="day-number">4</span>
+                    <div class="day-events"></div>
+                </div><div class="calendar-day" data-date="2026-09-05T00:00:00">
+                    <span class="day-number">5</span>
+                    <div class="day-events"></div>
+                </div><div class="calendar-day" data-date="2026-09-06T00:00:00">
+                    <span class="day-number">6</span>
+                    <div class="day-events"></div>
+                </div><div class="calendar-day" data-date="2026-09-07T00:00:00">
+                    <span class="day-number">7</span>
+                    <div class="day-events"></div>
+                </div><div class="calendar-day" data-date="2026-09-08T00:00:00">
+                    <span class="day-number">8</span>
+                    <div class="day-events"></div>
+                </div><div class="calendar-day" data-date="2026-09-09T00:00:00">
+                    <span class="day-number">9</span>
+                    <div class="day-events"></div>
+                </div><div class="calendar-day" data-date="2026-09-10T00:00:00">
+                    <span class="day-number">10</span>
+                    <div class="day-events"></div>
+                </div><div class="calendar-day" data-date="2026-09-11T00:00:00">
+                    <span class="day-number">11</span>
+                    <div class="day-events"></div>
+                </div><div class="calendar-day" data-date="2026-09-12T00:00:00">
+                    <span class="day-number">12</span>
+                    <div class="day-events"></div>
+                </div><div class="calendar-day" data-date="2026-09-13T00:00:00">
+                    <span class="day-number">13</span>
+                    <div class="day-events"></div>
+                </div><div class="calendar-day" data-date="2026-09-14T00:00:00">
+                    <span class="day-number">14</span>
+                    <div class="day-events"></div>
+                </div><div class="calendar-day" data-date="2026-09-15T00:00:00">
+                    <span class="day-number">15</span>
+                    <div class="day-events"></div>
+                </div><div class="calendar-day" data-date="2026-09-16T00:00:00">
+                    <span class="day-number">16</span>
+                    <div class="day-events"></div>
+                </div><div class="calendar-day" data-date="2026-09-17T00:00:00">
+                    <span class="day-number">17</span>
+                    <div class="day-events"></div>
+                </div><div class="calendar-day" data-date="2026-09-18T00:00:00">
+                    <span class="day-number">18</span>
+                    <div class="day-events"></div>
+                </div><div class="calendar-day" data-date="2026-09-19T00:00:00">
+                    <span class="day-number">19</span>
+                    <div class="day-events"></div>
+                </div><div class="calendar-day" data-date="2026-09-20T00:00:00">
+                    <span class="day-number">20</span>
+                    <div class="day-events"></div>
+                </div><div class="calendar-day" data-date="2026-09-21T00:00:00">
+                    <span class="day-number">21</span>
+                    <div class="day-events"></div>
+                </div><div class="calendar-day" data-date="2026-09-22T00:00:00">
+                    <span class="day-number">22</span>
+                    <div class="day-events"></div>
+                </div><div class="calendar-day today" data-date="2026-09-23T00:00:00">
+                    <span class="day-number">23</span>
+                    <div class="day-events"></div>
+                </div><div class="calendar-day" data-date="2026-09-24T00:00:00">
+                    <span class="day-number">24</span>
+                    <div class="day-events"></div>
+                </div><div class="calendar-day" data-date="2026-09-25T00:00:00">
+                    <span class="day-number">25</span>
+                    <div class="day-events"></div>
+                </div><div class="calendar-day" data-date="2026-09-26T00:00:00">
+                    <span class="day-number">26</span>
+                    <div class="day-events"></div>
+                </div><div class="calendar-day" data-date="2026-09-27T00:00:00">
+                    <span class="day-number">27</span>
+                    <div class="day-events"></div>
+                </div><div class="calendar-day" data-date="2026-09-28T00:00:00">
+                    <span class="day-number">28</span>
+                    <div class="day-events"></div>
+                </div><div class="calendar-day" data-date="2026-09-29T00:00:00">
+                    <span class="day-number">29</span>
+                    <div class="day-events"></div>
+                </div><div class="calendar-day" data-date="2026-09-30T00:00:00">
+                    <span class="day-number">30</span>
+                    <div class="day-events"></div>
+                </div><div class="calendar-day empty"></div><div class="calendar-day empty"></div><div class="calendar-day empty"></div><div class="calendar-day empty"></div></div></div>
+            </div>
+            
+        </div>
+    </div>
+    <div class="bg-white p-4 shadow-md rounded-xl">
+      <h3 class="font-medium mb-2">KanbanBoard.to_html()</h3>
+      <div class="kanban-board kanban-medium" style="height: 600px;">
+            
+            
+            <div class="kanban-columns"></div>
+            
+        </div>
+    </div>
+    <div class="bg-white p-4 shadow-md rounded-xl">
+      <h3 class="font-medium mb-2">Timeline.to_html()</h3>
+      <div class="timeline timeline-vertical timeline-alternate">
+            
+            <div class="timeline-track">
+                
+            </div>
+            
+        </div>
+    </div>
+    <div class="bg-white p-4 shadow-md rounded-xl">
+      <h3 class="font-medium mb-2">QRCode.to_html()</h3>
+      <div class="qr-container">
+            
+            <div class="qr-wrapper">
+                <canvas id="qr-canvas" width="200" height="200" style="display:none;"></canvas>
+                <svg id="qr-svg" class="qr-code" width="200" height="200" viewBox="0 0 200 200">
+                    <rect width="200" height="200" fill="#ffffff"/>
+                    <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="#000000" font-size="12" font-family="system-ui">QR Code</text>
+                </svg>
+                
+            </div>
+            
+        </div>
+    </div>
+    <div class="bg-white p-4 shadow-md rounded-xl">
+      <h3 class="font-medium mb-2">MediaPlayer.to_html()</h3>
+      <div class="media-player player-medium">
+            
+            <div class="player-container">
+                <video class="player-media" preload="metadata" controls>
+                <source src="https://example.com/demo.mp4">
+                
+                Your browser does not support the video tag.
+            </video>
+                <div class="player-controls">
+                <button type="button" class="player-btn player-play">&#9654;</button>
+                <div class="player-progress">
+                    <div class="player-progress-bar"></div>
+                </div>
+                <span class="player-time">0:00 / 0:00</span>
+                <input type="range" class="player-volume" min="0" max="1" step="0.1" value="1">
+                <button type="button" class="player-btn player-fullscreen">&#x26F6;</button>
+                
+            </div>
+            </div>
+            
+        </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ: real Accordion -->
+<section class="max-w-3xl mx-auto px-4 mb-16">
+  <h2 class="text-3xl font-semibold mb-4">FAQ — default Accordion</h2>
+  
+        <div id="accordion-1911779037200" class="border rounded-lg " role="presentation">
+            
+            <div class="border-b">
+                <button 
+                    class="w-full px-4 py-3 text-left font-medium flex justify-between items-center hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+                    onclick="toggleAccordion('accordion-1911779037200', 0)"
+                    aria-expanded="true"
+                    aria-controls="accordion-1911779037200-panel-0"
+                >
+                    <span>Do I need JavaScript?</span>
+                    <svg class="w-5 h-5 transform transition-transform" style="transform: rotate(180deg)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <div 
+                    id="accordion-1911779037200-panel-0"
+                    class="overflow-hidden transition-all duration-300"
+                    style="display: block; max-height: auto"
+                    role="region"
+                    aria-labelledby="accordion-1911779037200-header-0"
+                >
+                    <div class="px-4 pb-3 text-gray-700">
+                        No. Write Python, Ontaic compiles to schema + WASM.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-b">
+                <button 
+                    class="w-full px-4 py-3 text-left font-medium flex justify-between items-center hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+                    onclick="toggleAccordion('accordion-1911779037200', 1)"
+                    aria-expanded="false"
+                    aria-controls="accordion-1911779037200-panel-1"
+                >
+                    <span>How fast is it?</span>
+                    <svg class="w-5 h-5 transform transition-transform" style="transform: rotate(0deg)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <div 
+                    id="accordion-1911779037200-panel-1"
+                    class="overflow-hidden transition-all duration-300"
+                    style="display: none; max-height: 0"
+                    role="region"
+                    aria-labelledby="accordion-1911779037200-header-1"
+                >
+                    <div class="px-4 pb-3 text-gray-700">
+                        State patches apply directly to the DOM — 0ms, no round-trip.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-b">
+                <button 
+                    class="w-full px-4 py-3 text-left font-medium flex justify-between items-center hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+                    onclick="toggleAccordion('accordion-1911779037200', 2)"
+                    aria-expanded="false"
+                    aria-controls="accordion-1911779037200-panel-2"
+                >
+                    <span>How do I deploy?</span>
+                    <svg class="w-5 h-5 transform transition-transform" style="transform: rotate(0deg)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <div 
+                    id="accordion-1911779037200-panel-2"
+                    class="overflow-hidden transition-all duration-300"
+                    style="display: none; max-height: 0"
+                    role="region"
+                    aria-labelledby="accordion-1911779037200-header-2"
+                >
+                    <div class="px-4 pb-3 text-gray-700">
+                        Static output. Any CDN, S3, or GitHub Pages works.
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <script>
+        function toggleAccordion(id, index) {
+            const accordion = document.getElementById(id);
+            const panels = accordion.querySelectorAll('[id^="' + id + '-panel-"]');
+            const buttons = accordion.querySelectorAll('button');
+            
+            panels.forEach((panel, i) => {
+                if (i === index) {
+                    const isOpen = panel.style.display === 'block';
+                    panel.style.display = isOpen ? 'none' : 'block';
+                    panel.style.maxHeight = isOpen ? '0' : panel.scrollHeight + 'px';
+                    buttons[i].setAttribute('aria-expanded', !isOpen);
+                    buttons[i].querySelector('svg').style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+                }
+            });
+        }
+        </script>
+        
+</section>
+
+<!-- CODE -->
+<section id="code" class="max-w-5xl mx-auto px-4 mb-16">
+  <h2 class="text-3xl font-semibold mb-2">Python source that made this</h2>
+  <pre class="bg-gray-900 text-gray-100 p-6 rounded-xl overflow-auto text-sm"><code>from ontaic.navigation import Navbar, NavLink
+from ontaic.table import Table
+from ontaic.forms import FormField, Select, Checkbox
+from ontaic.extra_components import Accordion, Alert, Avatar, Badge
+from ontaic.charts import BarChart, ChartDataset
+
+Navbar(brand="⚡ Ontaic", ...).render()
+Table(columns=..., data=..., striped=True).render()
+BarChart(labels=..., datasets=[ChartDataset(...)]).render()
+FormField(name="email", ...).render()
+Alert(message=..., alert_type="success").render()
+Avatar(name="Ada Lovelace").render()
+Accordion(items=[...]).render()</code></pre>
+  <p class="text-gray-600 mt-2">Full file: <code>examples/landing/app.py</code>. This HTML was generated by <code>examples/landing/build.py</code>.</p>
+</section>
+
+<footer class="border-t bg-white">
+  <div class="max-w-7xl mx-auto px-4 py-8 text-sm text-gray-500 flex justify-between flex-wrap gap-2">
+    <span>⚡ Ontaic defaults preview — Tailwind + SDK CSS, no custom theme.</span>
+    <span>430+ exports • 53KB WASM • MIT</span>
+  </div>
+</footer>
+
+</body>
+</html>
