@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ontaic - Bi-Directional Compiler & State Runtime for Python</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav container">
+            <a href="/" class="logo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">Ontaic</span>
+            </a>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="/docs/">Docs</a>
+                <a href="/examples/">Examples</a>
+                <a href="https://github.com/ontaic/ontaic-ui" target="_blank" class="github-link">GitHub</a>
+            </div>
+            <button class="mobile-menu-btn" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-badge">Open Source • Python • WASM • 0ms DOM Updates</div>
+                <h1 class="hero-title">
+                    Build UIs in Python.<br>
+                    <span class="gradient-text">Ship at the Speed of Thought.</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Ontaic compiles Python code into static UI schemas and a Rust WASM runtime
+                    for instant browser-side DOM mutations. No virtual DOM. No network round-trips.
+                    Pure speed.
+                </p>
+                <div class="hero-cta">
+                    <a href="#quickstart" class="btn btn-primary">Get Started</a>
+                    <a href="https://github.com/ontaic/ontaic-ui" class="btn btn-secondary" target="_blank">View on GitHub</a>
+                </div>
+                <div class="hero-comparison">
+                    <div class="comparison-item">
+                        <span class="comparison-label">Ontaic</span>
+                        <span class="comparison-value fast">0ms</span>
+                        <span class="comparison-desc">DOM Update</span>
+                    </div>
+                    <div class="comparison-item">
+                        <span class="comparison-label">Streamlit</span>
+                        <span class="comparison-value slow">200-500ms</span>
+                        <span class="comparison-desc">Server Round-trip</span>
+                    </div>
+                    <div class="comparison-item">
+                        <span class="comparison-label">Reflex</span>
+                        <span class="comparison-value slow">150-300ms</span>
+                        <span class="comparison-desc">Server Round-trip</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="features">
+            <div class="container">
+                <h2 class="section-title">Why Ontaic?</h2>
+                <p class="section-subtitle">Everything you need to build fast, beautiful Python UIs</p>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3>0ms DOM Updates</h3>
+                        <p>Rust WASM runtime directly patches the DOM. No virtual DOM diffing, no server round-trips.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🐍</div>
+                        <h3>Pure Python</h3>
+                        <p>Write your UI in Python. No JavaScript, no TypeScript, no HTML templates.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📦</div>
+                        <h3>Static Output</h3>
+                        <p>Compiles to static JSON schemas + WASM. Deploy anywhere—CDN, S3, GitHub Pages.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎨</div>
+                        <h3>430+ Components</h3>
+                        <p>Data grids, charts, editors, maps, 3D viewers, kanban boards, and more.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔄</div>
+                        <h3>Hot Reload</h3>
+                        <p>Edit Python files, see changes instantly. Built-in file watcher with smart debouncing.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📦</div>
+                        <h3>shadcn-style Distribution</h3>
+                        <p>Fetch raw components from GitHub. No central registry, no vendor lock-in.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works -->
+        <section id="how-it-works" class="how-it-works">
+            <div class="container">
+                <h2 class="section-title">How It Works</h2>
+                <p class="section-subtitle">From Python code to blazing-fast UI in 3 steps</p>
+                
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>Write Python</h3>
+                            <pre class="code-block"><code>from ontaic import *
+
+class Counter(Component):
+    count: int = 0
+
+    def render(self):
+        return Container(
+            Heading(f"Count: {self.count}"),
+            Button("Increment", on_click=self.count.add(1))
+        )</code></pre>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>Compile to Schema</h3>
+                            <pre class="code-block"><code>{
+  "type": "container",
+  "children": [
+    {
+      "type": "heading",
+      "text": "Count: {count}"
+    },
+    {
+      "type": "button",
+      "text": "Increment",
+      "onClick": "state.count++"
+    }
+  ]
+}</code></pre>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>Run in WASM</h3>
+                            <pre class="code-block"><code>// Rust WASM patches DOM directly
+fn patch_dom(op: PatchOp) {
+    match op {
+        PatchOp::SetText { id, text } => {
+            document.get_element_by_id(&id)
+                .set_text_content(&text);
+        }
+        PatchOp::SetAttr { id, key, val } => {
+            // Direct DOM manipulation
+        }
+    }
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Start -->
+        <section id="quickstart" class="quickstart">
+            <div class="container">
+                <h2 class="section-title">Quick Start</h2>
+                <p class="section-subtitle">Get up and running in 2 minutes</p>
+                
+                <div class="quickstart-steps">
+                    <div class="quickstart-step">
+                        <h3>1. Install the CLI</h3>
+                        <div class="code-copy">
+                            <pre><code>cargo install ontaic-cli</code></pre>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                    </div>
+                    <div class="quickstart-step">
+                        <h3>2. Create a project</h3>
+                        <div class="code-copy">
+                            <pre><code>ontaic init my-app
+cd my-app</code></pre>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                    </div>
+                    <div class="quickstart-step">
+                        <h3>3. Add a component</h3>
+                        <div class="code-copy">
+                            <pre><code>ontaic add counter</code></pre>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                    </div>
+                    <div class="quickstart-step">
+                        <h3>4. Start development</h3>
+                        <div class="code-copy">
+                            <pre><code>ontaic dev</code></pre>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SDK Section -->
+        <section class="sdk-section">
+            <div class="container">
+                <h2 class="section-title">Python SDK</h2>
+                <p class="section-subtitle">Install with pip</p>
+                
+                <div class="code-copy large">
+                    <pre><code>pip install ontaic</code></pre>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                
+                <div class="sdk-features">
+                    <div class="sdk-feature">
+                        <h4>Components</h4>
+                        <p>Box, Text, Button, Input, Image, and 400+ more</p>
+                    </div>
+                    <div class="sdk-feature">
+                        <h4>Layouts</h4>
+                        <p>Flex, Grid, Stack, Container, Card</p>
+                    </div>
+                    <div class="sdk-feature">
+                        <h4>Forms</h4>
+                        <p>Form, Select, Checkbox, Radio, DatePicker</p>
+                    </div>
+                    <div class="sdk-feature">
+                        <h4>Data</h4>
+                        <p>DataGrid, Table, Charts, Spreadsheet</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta">
+            <div class="container">
+                <h2>Ready to Build Fast?</h2>
+                <p>Join the community and start building blazing-fast Python UIs today.</p>
+                <div class="cta-buttons">
+                    <a href="https://github.com/ontaic/ontaic-ui" class="btn btn-primary" target="_blank">Get Started</a>
+                    <a href="/docs/" class="btn btn-secondary">Read the Docs</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="logo-icon">⚡</span>
+                    <span class="logo-text">Ontaic</span>
+                    <p>Bi-Directional Compiler & State Runtime for Python</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Product</h4>
+                        <a href="#features">Features</a>
+                        <a href="#quickstart">Quick Start</a>
+                        <a href="/docs/">Documentation</a>
+                        <a href="/examples/">Examples</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Community</h4>
+                        <a href="https://github.com/ontaic/ontaic-ui" target="_blank">GitHub</a>
+                        <a href="https://github.com/ontaic/ontaic-ui/issues" target="_blank">Issues</a>
+                        <a href="https://github.com/ontaic/ontaic-ui/discussions" target="_blank">Discussions</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Resources</h4>
+                        <a href="/docs/api/">API Reference</a>
+                        <a href="/docs/components/">Components</a>
+                        <a href="/docs/compiler/">Compiler</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Ontaic. Open source under MIT License.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>

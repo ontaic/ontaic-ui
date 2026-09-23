@@ -184,6 +184,14 @@ from ontaic.mapcomponent import (
     MapComponent, MapTile, MarkerIcon, LatLng, Marker, Polyline, Polygon, Circle,
     create_map, lat_lng, map_marker,
 )
+from ontaic.qrcode import (
+    QRCode, QRLevel, QRFormat, QRStyle,
+    create_qr_code, qr_style,
+)
+from ontaic.signaturepad import (
+    SignaturePad, SignatureStyle,
+    create_signature_pad, signature_style,
+)
 
 __version__ = "0.1.0"
 __all__ = [
@@ -345,4 +353,10 @@ __all__ = [
     # Map
     "MapComponent", "MapTile", "MarkerIcon", "LatLng", "Marker", "Polyline", "Polygon", "Circle",
     "create_map", "lat_lng", "map_marker",
+    # QR Code
+    "QRCode", "QRLevel", "QRFormat", "QRStyle",
+    "create_qr_code", "qr_style",
+    # Signature Pad
+    "SignaturePad", "SignatureStyle",
+    "create_signature_pad", "signature_style",
 ]

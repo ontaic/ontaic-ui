@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation - Ontaic</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/src/style.css">
+    <link rel="stylesheet" href="/src/docs.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav container">
+            <a href="/" class="logo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">Ontaic</span>
+            </a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/docs/" class="active">Docs</a>
+                <a href="/examples/">Examples</a>
+                <a href="https://github.com/ontaic/ontaic-ui" target="_blank" class="github-link">GitHub</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="docs-layout">
+        <aside class="docs-sidebar">
+            <nav class="docs-nav">
+                <h4>Getting Started</h4>
+                <ul>
+                    <li><a href="#introduction" class="active">Introduction</a></li>
+                    <li><a href="#installation">Installation</a></li>
+                    <li><a href="#quickstart">Quick Start</a></li>
+                    <li><a href="#project-structure">Project Structure</a></li>
+                </ul>
+                
+                <h4>Core Concepts</h4>
+                <ul>
+                    <li><a href="#components">Components</a></li>
+                    <li><a href="#state">State Management</a></li>
+                    <li><a href="#events">Events</a></li>
+                    <li><a href="#layouts">Layouts</a></li>
+                </ul>
+                
+                <h4>Components</h4>
+                <ul>
+                    <li><a href="#basic">Basic Components</a></li>
+                    <li><a href="#forms">Form Components</a></li>
+                    <li><a href="#data">Data Components</a></li>
+                    <li><a href="#charts">Charts & Visualization</a></li>
+                    <li><a href="#advanced">Advanced Components</a></li>
+                </ul>
+                
+                <h4>CLI</h4>
+                <ul>
+                    <li><a href="#cli-init">ontaic init</a></li>
+                    <li><a href="#cli-add">ontaic add</a></li>
+                    <li><a href="#cli-dev">ontaic dev</a></li>
+                    <li><a href="#cli-build">ontaic build</a></li>
+                </ul>
+                
+                <h4>API Reference</h4>
+                <ul>
+                    <li><a href="#compiler">Compiler</a></li>
+                    <li><a href="#runtime">WASM Runtime</a></li>
+                    <li><a href="#sdk">Python SDK</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <div class="docs-content">
+            <section id="introduction">
+                <h1>Introduction</h1>
+                <p>Ontaic is a Bi-Directional Compiler & State Runtime for Python that compiles Python code into static UI schemas and a Rust WASM runtime for instant browser-side DOM mutations.</p>
+                
+                <div class="info-box">
+                    <strong>Why Ontaic?</strong>
+                    <ul>
+                        <li><strong>0ms DOM Updates</strong> - Rust WASM directly patches the DOM</li>
+                        <li><strong>Pure Python</strong> - No JavaScript or TypeScript needed</li>
+                        <li><strong>Static Output</strong> - Deploy anywhere (CDN, S3, GitHub Pages)</li>
+                        <li><strong>430+ Components</strong> - Everything from data grids to 3D viewers</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="installation">
+                <h2>Installation</h2>
+                
+                <h3>CLI (Rust)</h3>
+                <div class="code-block">
+                    <pre><code>cargo install ontaic-cli</code></pre>
+                </div>
+                
+                <h3>Python SDK</h3>
+                <div class="code-block">
+                    <pre><code>pip install ontaic</code></pre>
+                </div>
+                
+                <h3>From Source</h3>
+                <div class="code-block">
+                    <pre><code>git clone https://github.com/ontaic/ontaic-ui.git
+cd ontaic-ui
+cargo build --release
+cd python
+pip install -e .</code></pre>
+                </div>
+            </section>
+
+            <section id="quickstart">
+                <h2>Quick Start</h2>
+                
+                <h3>1. Create a new project</h3>
+                <div class="code-block">
+                    <pre><code>ontaic init my-app
+cd my-app</code></pre>
+                </div>
+                
+                <h3>2. Create your first component</h3>
+                <div class="code-block">
+                    <pre><code># src/components/counter.py
+from ontaic import *
+
+class Counter(Component):
+    count: int = 0
+    
+    def render(self):
+        return Container(
+            Heading(f"Count: {self.count}"),
+            Flex(
+                Button("Increment", on_click=self.count.add(1)),
+                Button("Decrement", on_click=self.count.sub(1)),
+                gap="1rem"
+            )
+        )</code></pre>
+                </div>
+                
+                <h3>3. Start development</h3>
+                <div class="code-block">
+                    <pre><code>ontaic dev</code></pre>
+                </div>
+                
+                <p>Open <code>http://localhost:3000</code> to see your app.</p>
+            </section>
+
+            <section id="project-structure">
+                <h2>Project Structure</h2>
+                <div class="code-block">
+                    <pre><code>my-app/
+├── src/
+│   ├── components/     # Python components
+│   │   ├── __init__.py
+│   │   └── counter.py
+│   ├── layouts/        # Layout components
+│   ├── pages/          # Page components
+│   └── state/          # State management
+├── public/             # Static assets
+├── ontaic.json         # Configuration
+└── package.json        # Dependencies</code></pre>
+                </div>
+            </section>
+
+            <section id="components">
+                <h2>Components</h2>
+                <p>Components are the building blocks of your UI. They inherit from the <code>Component</code> class and implement a <code>render()</code> method.</p>
+                
+                <div class="code-block">
+                    <pre><code>from ontaic import *
+
+class MyComponent(Component):
+    # State fields
+    name: str = "World"
+    count: int = 0
+    
+    def render(self):
+        return Container(
+            Heading(f"Hello, {self.name}!"),
+            Text(f"Count: {self.count}"),
+            Button("Click me", on_click=self.count.add(1))
+        )</code></pre>
+                </div>
+            </section>
+
+            <section id="state">
+                <h2>State Management</h2>
+                <p>State is automatically tracked and updates the UI when changed.</p>
+                
+                <h3>Local State</h3>
+                <div class="code-block">
+                    <pre><code>class Counter(Component):
+    count: int = 0  # Local state
+    
+    def increment(self):
+        self.count += 1</code></pre>
+                </div>
+                
+                <h3>Persistent State</h3>
+                <div class="code-block">
+                    <pre><code>from ontaic import *
+
+# State persists across sessions
+user_state = PersistentState("user", {
+    "name": "",
+    "isLoggedIn": False
+})</code></pre>
+                </div>
+            </section>
+
+            <section id="events">
+                <h2>Events</h2>
+                <p>Handle user interactions with event handlers.</p>
+                
+                <div class="code-block">
+                    <pre><code>class Form(Component):
+    name: str = ""
+    
+    def handle_submit(self):
+        print(f"Submitted: {self.name}")
+    
+    def render(self):
+        return Form(
+            Input(
+                value=self.name,
+                on_change=self.name.set
+            ),
+            Button("Submit", on_click=self.handle_submit)
+        )</code></pre>
+                </div>
+            </section>
+
+            <section id="layouts">
+                <h2>Layouts</h2>
+                <p>Use layout components to structure your UI.</p>
+                
+                <div class="code-block">
+                    <pre><code>from ontaic import *
+
+# Flex layout
+Flex(
+    Text("Item 1"),
+    Text("Item 2"),
+    Text("Item 3"),
+    direction="row",
+    gap="1rem",
+    justify="center"
+)
+
+# Grid layout
+Grid(
+    Card(Text("Card 1")),
+    Card(Text("Card 2")),
+    Card(Text("Card 3")),
+    columns=3,
+    gap="1.5rem"
+)
+
+# Stack layout
+Stack(
+    Heading("Title"),
+    Text("Description"),
+    Button("Action"),
+    spacing="1rem"
+)</code></pre>
+                </div>
+            </section>
+
+            <section id="basic">
+                <h2>Basic Components</h2>
+                <div class="component-list">
+                    <div class="component-item">
+                        <h4>Box</h4>
+                        <p>A generic container element.</p>
+                    </div>
+                    <div class="component-item">
+                        <h4>Text</h4>
+                        <p>Renders text content.</p>
+                    </div>
+                    <div class="component-item">
+                        <h4>Button</h4>
+                        <p>Clickable button element.</p>
+                    </div>
+                    <div class="component-item">
+                        <h4>Input</h4>
+                        <p>Text input field.</p>
+                    </div>
+                    <div class="component-item">
+                        <h4>Image</h4>
+                        <p>Image element with lazy loading.</p>
+                    </div>
+                    <div class="component-item">
+                        <h4>Heading</h4>
+                        <p>Heading element (h1-h6).</p>
+                    </div>
+                    <div class="component-item">
+                        <h4>Paragraph</h4>
+                        <p>Paragraph text element.</p>
+                    </div>
+                    <div class="component-item">
+                        <h4>Badge</h4>
+                        <p>Status badge element.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="forms">
+                <h2>Form Components</h2>
+                <div class="component-list">
+                    <div class="component-item">
+                        <h4>Form</h4>
+                        <p>Form container with validation.</p>
+                    </div>
+                    <div class="component-item">
+                        <h4>Select</h4>
+                        <p>Dropdown select element.</p>
+                    </div>
+                    <div class="component-item">
+                        <h4>Checkbox</h4>
+                        <p>Checkbox input.</p>
+                    </div>
+                    <div class="component-item">
+                        <h4>Radio</h4>
+                        <p>Radio button input.</p>
+                    </div>
+                    <div class="component-item">
+                        <h4>DatePicker</h4>
+                        <p>Date picker with calendar.</p>
+                    </div>
+                    <div class="component-item">
+                        <h4>ColorPicker</h4>
+                        <p>Color picker with presets.</p>
+                    </div>
+                    <div class="component-item">
+                        <h4>FileUpload</h4>
+                        <p>File upload with preview.</p>
+                    </div>
+                    <div class="component-item">
+                        <h4>SignaturePad</h4>
+                        <p>Handwritten signature capture.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="data">
+                <h2>Data Components</h2>
+                <div class="component-list">
+                    <div class="component-item">
+                        <h4>DataGrid</h4>
+                        <p>Advanced data grid with sorting, filtering, pagination.</p>
+                    </div>
+                    <div class="component-item">
+                        <h4>Table</h4>
+                        <p>Basic table component.</p>
+                    </div>
+                    <div class="component-item">
+                        <h4>Spreadsheet</h4>
+                        <p>Excel-like spreadsheet.</p>
+                    </div>
+                    <div class="component-item">
+                        <h4>Calendar</h4>
+                        <p>Calendar with events.</p>
+                    </div>
+                    <div class="component-item">
+                        <h4>Kanban</h4>
+                        <p>Kanban board for task management.</p>
+                    </div>
+                    <div class="component-item">
+                        <h4>TreeView</h4>
+                        <p>Hierarchical tree view.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="charts">
+                <h2>Charts & Visualization</h2>
+                <div class="component-list">
+                    <div class="component-item">
+                        <h4>ChartBuilder</h4>
+                        <p>Interactive chart builder with type selector.</p>
+                    </div>
+                    <div class="component-item">
+                        <h4>LineChart</h4>
+                        <p>Line chart component.</p>
+                    </div>
+                    <div class="component-item">
+                        <h4>BarChart</h4>
+                        <p>Bar chart component.</p>
+                    </div>
+                    <div class="component-item">
+                        <h4>PieChart</h4>
+                        <p>Pie chart component.</p>
+                    </div>
+                    <div class="component-item">
+                        <h4>FlowChart</h4>
+                        <p>Visual workflow builder.</p>
+                    </div>
+                    <div class="component-item">
+                        <h4>MindMap</h4>
+                        <p>Mind map visualization.</p>
+                    </div>
+                    <div class="component-item">
+                        <h4>Viewer3D</h4>
+                        <p>3D viewer with Three.js.</p>
+                    </div>
+                    <div class="component-item">
+                        <h4>MapComponent</h4>
+                        <p>Interactive map with Leaflet.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="advanced">
+                <h2>Advanced Components</h2>
+                <div class="component-list">
+                    <div class="component-item">
+                        <h4>MediaPlayer</h4>
+                        <p>Audio/video player with custom controls.</p>
+                    </div>
+                    <div class="component-item">
+                        <h4>CodeEditor</h4>
+                        <p>Syntax-highlighted code editor.</p>
+                    </div>
+                    <div class="component-item">
+                        <h4>RichTextEditor</h4>
+                        <p>Rich text editor with toolbar.</p>
+                    </div>
+                    <div class="component-item">
+                        <h4>MarkdownEditor</h4>
+                        <p>Markdown editor with live preview.</p>
+                    </div>
+                    <div class="component-item">
+                        <h4>QRCode</h4>
+                        <p>QR code generator.</p>
+                    </div>
+                    <div class="component-item">
+                        <h4>ImageCropper</h4>
+                        <p>Image cropping tool.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="cli-init">
+                <h2>ontaic init</h2>
+                <p>Initialize a new Ontaic project.</p>
+                <div class="code-block">
+                    <pre><code>ontaic init [project-name]</code></pre>
+                </div>
+                <p>Creates a new project directory with the following structure:</p>
+                <ul>
+                    <li><code>ontaic.json</code> - Project configuration</li>
+                    <li><code>src/</code> - Source directory</li>
+                    <li><code>public/</code> - Static assets</li>
+                </ul>
+            </section>
+
+            <section id="cli-add">
+                <h2>ontaic add</h2>
+                <p>Add a component from the registry.</p>
+                <div class="code-block">
+                    <pre><code>ontaic add [component-name]</code></pre>
+                </div>
+                <p>Fetches the component from GitHub and adds it to your project.</p>
+            </section>
+
+            <section id="cli-dev">
+                <h2>ontaic dev</h2>
+                <p>Start the development server with hot-reload.</p>
+                <div class="code-block">
+                    <pre><code>ontaic dev [--port 3000]</code></pre>
+                </div>
+                <p>Features:</p>
+                <ul>
+                    <li>Hot-reload on file changes</li>
+                    <li>Automatic WASM compilation</li>
+                    <li>Error overlay</li>
+                    <li>Live preview</li>
+                </ul>
+            </section>
+
+            <section id="cli-build">
+                <h2>ontaic build</h2>
+                <p>Build the project for production.</p>
+                <div class="code-block">
+                    <pre><code>ontaic build [--output dist]</code></pre>
+                </div>
+                <p>Outputs:</p>
+                <ul>
+                    <li><code>schema.json</code> - UI schema</li>
+                    <li><code>ontaic_bg.wasm</code> - WASM binary (<100KB)</li>
+                    <li><code>index.html</code> - Entry point</li>
+                </ul>
+            </section>
+
+            <section id="compiler">
+                <h2>Compiler API</h2>
+                <p>The compiler transforms Python code into JSON schemas.</p>
+                <div class="code-block">
+                    <pre><code>from ontaic.compiler import OntaicCompiler
+
+compiler = OntaicCompiler()
+
+# Compile a file
+schema = compiler.compile_file("src/components/counter.py")
+
+# Compile a directory
+schemas = compiler.compile_directory("src/components/")
+
+# Save schema
+compiler.save_schema(schema, "dist/schema.json")</code></pre>
+                </div>
+            </section>
+
+            <section id="runtime">
+                <h2>WASM Runtime</h2>
+                <p>The Rust WASM runtime handles state and DOM updates.</p>
+                <div class="code-block">
+                    <pre><code>// State management
+let state = StateStore::new();
+state.set("count", 0);
+state.on_change(|key, value| {
+    // Apply DOM patches
+    patch_dom(PatchOp::SetText {
+        id: "counter".to_string(),
+        text: value.to_string(),
+    });
+});
+
+// DOM patching
+fn patch_dom(op: PatchOp) {
+    match op {
+        PatchOp::SetText { id, text } => {
+            document.get_element_by_id(&id)
+                .set_text_content(&text);
+        }
+        PatchOp::SetAttr { id, key, val } => {
+            document.get_element_by_id(&id)
+                .set_attribute(&key, &val);
+        }
+        // ... more operations
+    }
+}</code></pre>
+                </div>
+            </section>
+
+            <section id="sdk">
+                <h2>Python SDK</h2>
+                <p>The Python SDK provides 430+ components and utilities.</p>
+                <div class="code-block">
+                    <pre><code>from ontaic import *
+
+# Components
+Box, Text, Button, Input, Image
+
+# Layouts
+Container, Flex, Grid, Stack, Center, Spacer
+
+# Forms
+Form, Select, Checkbox, Radio, DatePicker
+
+# Data
+DataGrid, Table, Spreadsheet, Calendar
+
+# Charts
+LineChart, BarChart, PieChart, ChartBuilder
+
+# Advanced
+CodeEditor, MediaPlayer, Viewer3D, MapComponent</code></pre>
+                </div>
+            </section>
+
+            <nav class="docs-pagination">
+                <a href="#" class="prev">← Previous</a>
+                <a href="/examples/" class="next">Examples →</a>
+            </nav>
+        </div>
+    </main>
+
+    <script src="/src/main.js"></script>
+    <script>
+        // Active nav link
+        document.querySelectorAll('.docs-nav a').forEach(link => {
+            link.addEventListener('click', function() {
+                document.querySelectorAll('.docs-nav a').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
